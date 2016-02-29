@@ -84,28 +84,28 @@ class User: ROJSONObject {
 ### Create object param class 
 
 ```swift
-  class SignInParam: RESTParam {
+class SignInParam: RESTParam {
     var email: String!
     var password: String!
-  }
+}
 ```
 
 ### Invoker
 
 - Init invoker with a controller:
 ```swift
-    init() {
-        super.init(controllerName: "sessions")
-    }
+init() {
+    super.init(controllerName: "sessions")
+}
 ```
 
 - Make a request to sign in and parse response to `SignInResult` object
 ```swift
-    func signIn(param: SignInParam, completion: (result: SignInResult?, error: RESTError?) -> Void) {
-        let request = requestWithMethodName(nil)
-        
-        request.POST(param) { (result: SignInResult?, error) -> () in
-            completion(result: result, error: error)
-        }
+func signIn(param: SignInParam, completion: (result: SignInResult?, error: RESTError?) -> Void) {
+    let request = requestWithMethodName(nil)
+    
+    request.POST(param) { (result: SignInResult?, error) -> () in
+        completion(result: result, error: error)
     }
+}
 ```

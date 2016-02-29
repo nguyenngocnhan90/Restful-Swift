@@ -10,14 +10,14 @@ RESTful service interaction in iOS project with Swift.
 ## Features
 
 - Request with dictionary param.
-- Request with object param [RESTParam](https://github.com/nguyenngocnhan90/N3Restful-Swift/blob/master/N3Restful/RESTParam.swift.
+- Request with object param [RESTParam](https://github.com/nguyenngocnhan90/N3Restful-Swift/blob/master/N3Restful/RESTParam.swift).
 - Request with multipart data (JSON, String, File).
 
 
 ## Installation
 
 - Embedded frameworks require a minimum deployment target of iOS 8.
-- Copy 'N3Restful' to your project. 
+- Copy 'N3Restful' folder to your project manually. 
 - Install [Alamofire](https://github.com/Alamofire/Alamofire) and [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON)
 
 ### CocoaPods

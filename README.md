@@ -1,6 +1,6 @@
 ## N3Restful-Swift
 
-RESTful service interaction in iOS project with Swift.
+RESTful service interaction in Swift iOS project.
 
 - Create request with [Alamofire](https://github.com/Alamofire/Alamofire).
 - Return JSON with [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON).
@@ -13,12 +13,14 @@ RESTful service interaction in iOS project with Swift.
 - Request with object param [RESTParam](https://github.com/nguyenngocnhan90/N3Restful-Swift/blob/master/N3Restful/RESTParam.swift).
 - Request with multipart data (JSON, String, File).
 
+## Requirements
+
+- iOS 8.0 or later.
 
 ## Installation
 
-- Embedded frameworks require a minimum deployment target of iOS 8.
 - Copy 'N3Restful' folder to your project manually. 
-- Install [Alamofire](https://github.com/Alamofire/Alamofire) and [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON)
+- Install [Alamofire](https://github.com/Alamofire/Alamofire) and [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON).
 
 ### CocoaPods
 
@@ -109,3 +111,9 @@ func signIn(param: SignInParam, completion: (result: SignInResult?, error: RESTE
     }
 }
 ```
+
+## Contribution
+
+If you see any problems or you want to make an improvement, please create [Issues](https://github.com/nguyenngocnhan90/N3Restful-Swift/issues) ans we can discuss.
+
+Thanks

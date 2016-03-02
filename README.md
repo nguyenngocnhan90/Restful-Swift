@@ -19,7 +19,7 @@ RESTful service interaction in Swift iOS project.
 
 ## Installation
 
-- Copy 'N3Restful' folder to your project manually. 
+- Copy [`N3Restful`](https://github.com/nguyenngocnhan90/N3Restful-Swift/tree/master/N3Restful) folder to your project manually. 
 - Install [Alamofire](https://github.com/Alamofire/Alamofire) and [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON).
 
 ### CocoaPods

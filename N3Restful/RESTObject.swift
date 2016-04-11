@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-class ROJSONObject {
+class RESTObject {
     
     var jsonData:JSON
 
@@ -55,7 +55,7 @@ class ROJSONObject {
         return jsonData[key].object
     }
     
-    func getArray<T : ROJSONObject>(key:String) -> [T] {
+    func getArray<T : RESTObject>(key:String) -> [T] {
         var elements = [T]()
         
         for jsonValue in getJSONValue(key).array! {
@@ -75,19 +75,19 @@ class ROJSONObject {
 }
 
 class Value<T> {
-    class func get(rojsonobject:ROJSONObject, key:String) -> T {
+    class func get(rojsonobject:RESTObject, key:String) -> T {
         let obj = rojsonobject.getValue(key)
         return obj as! T
     }
     
-    class func getROJSONOject<T : ROJSONObject>(rojsonobject:ROJSONObject, key:String) -> T! {
+    class func getJSONOject<T : RESTObject>(rojsonobject:RESTObject, key:String) -> T! {
         let object = (T.self as T.Type).init()
         object.jsonData = rojsonobject.getJSONValue(key)
         
         return object
     }
     
-    class func getArray<T : ROJSONObject>(rojsonobject:ROJSONObject, key:String? = nil) -> [T] {
+    class func getArray<T : RESTObject>(rojsonobject: RESTObject, key:String? = nil) -> [T] {
         
         // If there is a key given fetch the array from the dictionary directly if not fetch all objects and pack it into an array
         if let dictKey = key {
@@ -106,7 +106,7 @@ class Value<T> {
         }
     }
     
-    class func getDate(rojsonobject:ROJSONObject, key:String, dateFormatter:NSDateFormatter? = nil) -> NSDate? {
+    class func getDate(rojsonobject: RESTObject, key:String, dateFormatter:NSDateFormatter? = nil) -> NSDate? {
         return rojsonobject.getDate(key, dateFormatter: dateFormatter)
     }
 }

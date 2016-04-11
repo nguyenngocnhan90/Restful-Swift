@@ -34,7 +34,7 @@ class RESTRequest: NSObject {
     
     - parameter completion: callback result
     */
-    func GET<T: ROJSONObject>(completion:(result: T?, error: RESTError?) -> ()) {
+    func GET<T: RESTObject>(completion:(result: T?, error: RESTError?) -> ()) {
         Alamofire.request(.GET, url)
             .responseJSON { response -> Void in
                 
@@ -58,7 +58,7 @@ class RESTRequest: NSObject {
     - parameter objectBody: object param - type RESTParam
     - parameter completion: callback result
     */
-    func POST<T: ROJSONObject>(objectBody: RESTParam!, completion:(result: T?, error: RESTError?) -> ()) {
+    func POST<T: RESTObject>(objectBody: RESTParam!, completion:(result: T?, error: RESTError?) -> ()) {
         requestWithObjectBody(objectBody, method: .POST) { (object, error) -> () in
             completion(result: object as? T, error: error)
         }
@@ -70,7 +70,7 @@ class RESTRequest: NSObject {
      - parameter objectBody: object param - type RESTParam
      - parameter completion: callback result
      */
-    func PUT<T: ROJSONObject>(objectBody: RESTParam!, completion:(result: T?, error: RESTError?) -> ()) {
+    func PUT<T: RESTObject>(objectBody: RESTParam!, completion:(result: T?, error: RESTError?) -> ()) {
         requestWithObjectBody(objectBody, method: .PUT) { (object, error) -> () in
             completion(result: object as? T, error: error)
         }
@@ -82,7 +82,7 @@ class RESTRequest: NSObject {
      - parameter objectBody: object param - type RESTParam
      - parameter completion: callback result
      */
-    func PATCH<T: ROJSONObject>(objectBody: RESTParam!, completion:(result: T?, error: RESTError?) -> ()) {
+    func PATCH<T: RESTObject>(objectBody: RESTParam!, completion:(result: T?, error: RESTError?) -> ()) {
         requestWithObjectBody(objectBody, method: .PATCH) { (object, error) -> () in
             completion(result: object as? T, error: error)
         }
@@ -94,13 +94,13 @@ class RESTRequest: NSObject {
      - parameter objectBody: object param - type RESTParam
      - parameter completion: callback result
      */
-    func DELETE<T: ROJSONObject>(objectBody: RESTParam!, completion:(result: T?, error: RESTError?) -> ()) {
+    func DELETE<T: RESTObject>(objectBody: RESTParam!, completion:(result: T?, error: RESTError?) -> ()) {
         requestWithObjectBody(objectBody, method: .DELETE) { (object, error) -> () in
             completion(result: object as? T, error: error)
         }
     }
     
-    private func requestWithObjectBody<T: ROJSONObject>(objectBody: RESTParam!, method: Alamofire.Method, completion:(result: T?, error: RESTError?) -> ()) {
+    private func requestWithObjectBody<T: RESTObject>(objectBody: RESTParam!, method: Alamofire.Method, completion:(result: T?, error: RESTError?) -> ()) {
         let dictionary = objectBody?.toDictionary()
         
         requestWithDictionary(dictionary, method: method) { (result, error) -> () in
@@ -115,7 +115,7 @@ class RESTRequest: NSObject {
      - parameter method:          request method
      - parameter completion:      callback result
      */
-    func requestWithDictionary<T: ROJSONObject>(dictionaryParam: [String: AnyObject]!, method: Alamofire.Method, completion:(result: T?, error: RESTError?) -> ()) {
+    func requestWithDictionary<T: RESTObject>(dictionaryParam: [String: AnyObject]!, method: Alamofire.Method, completion:(result: T?, error: RESTError?) -> ()) {
         if dictionaryParam != nil {
             self.parameters = dictionaryParam
         }
@@ -130,7 +130,8 @@ class RESTRequest: NSObject {
                 
                 switch response.result {
                 case .Success (let json):
-                    let object = (T.self as T.Type).init(jsonData: json)
+                    let castType = (T.self as T.Type)
+                    let object = castType.init(jsonData: json)
                     completion(result: object, error: nil)
                     
                 case .Failure (let error):
@@ -147,7 +148,7 @@ class RESTRequest: NSObject {
     
     - parameter completion: callback result
     */
-    func POST_Multipart<T: ROJSONObject>(completion:(result: T?, error: RESTError?) -> ()) {
+    func POST_Multipart<T: RESTObject>(completion:(result: T?, error: RESTError?) -> ()) {
         upload(.POST) { (object, error) -> () in
             completion(result: object as? T, error: error)
         }
@@ -158,7 +159,7 @@ class RESTRequest: NSObject {
      
      - parameter completion: callback result
      */
-    func PUT_Multipart<T: ROJSONObject>(completion:(result: T?, error: RESTError?) -> ()) {
+    func PUT_Multipart<T: RESTObject>(completion:(result: T?, error: RESTError?) -> ()) {
         upload(.PUT) { (object, error) -> () in
             completion(result: object as? T, error: error)
         }
@@ -170,7 +171,7 @@ class RESTRequest: NSObject {
      
      - parameter completion: callback result
      */
-    func PATCH_Multipart<T: ROJSONObject>(completion:(result: T?, error: RESTError?) -> ()) {
+    func PATCH_Multipart<T: RESTObject>(completion:(result: T?, error: RESTError?) -> ()) {
         upload(.PATCH) { (object, error) -> () in
             completion(result: object as? T, error: error)
         }
@@ -182,7 +183,7 @@ class RESTRequest: NSObject {
      - parameter method:     POST, PUT, PATCH
      - parameter completion: callback result
      */
-    private func upload<T: ROJSONObject>(method: Alamofire.Method, completion:(result: T?, error: RESTError?) -> ()) {
+    private func upload<T: RESTObject>(method: Alamofire.Method, completion:(result: T?, error: RESTError?) -> ()) {
         appendQueryParamsToURL()
         
         Alamofire.upload(

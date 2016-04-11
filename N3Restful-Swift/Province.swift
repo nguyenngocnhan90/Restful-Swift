@@ -8,7 +8,7 @@
 
 import UIKit
 
-class Province: ROJSONObject {
+class Province: RESTObject {
     
     var id: Int {
         return Value<Int>.get(self, key: "id")

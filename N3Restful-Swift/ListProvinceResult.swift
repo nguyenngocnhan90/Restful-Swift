@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ListProvinceResult: ROJSONObject {
+class ListProvinceResult: RESTObject {
 
     lazy var provinces: [Province] = {
         return Value<[Province]>.getArray(self, key: "provinces")

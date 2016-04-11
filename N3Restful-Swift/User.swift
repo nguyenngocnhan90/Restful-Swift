@@ -8,7 +8,7 @@
 
 import UIKit
 
-class User: ROJSONObject {
+class User: RESTObject {
 
     var email: String! {
         return Value<String>.get(self, key: "email")

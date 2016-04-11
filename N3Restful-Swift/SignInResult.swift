@@ -8,12 +8,12 @@
 
 import UIKit
 
-class SignInResult: ROJSONObject {
+class SignInResult: RESTObject {
     var access_token: String! {
         return Value<String>.get(self, key: "access_token")
     }
     
     lazy var user: User! = {
-        return Value<User>.getROJSONOject(self, key: "user")
+        return Value<User>.getJSONOject(self, key: "user")
     }()
 }

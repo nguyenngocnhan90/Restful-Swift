@@ -4,7 +4,7 @@ RESTful service interaction in Swift iOS project.
 
 - Create request with [Alamofire](https://github.com/Alamofire/Alamofire).
 - Return JSON with [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON).
-- Parse JSON to Swift object automacally with [ROJSONParser](https://github.com/prine/ROJSONParser).
+- Parse JSON to Swift object automacally with [ObjectMapper](https://github.com/Hearst-DD/ObjectMapper).
 
 
 ## Features
@@ -20,7 +20,7 @@ RESTful service interaction in Swift iOS project.
 ## Installation
 
 - Copy [`N3Restful`](https://github.com/nguyenngocnhan90/N3Restful-Swift/tree/master/N3Restful) folder to your project manually. 
-- Install [Alamofire](https://github.com/Alamofire/Alamofire) and [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON).
+- Install [Alamofire](https://github.com/Alamofire/Alamofire), [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON) and [ObjectMapper](https://github.com/Hearst-DD/ObjectMapper).
 
 ### CocoaPods
 
@@ -38,6 +38,7 @@ use_frameworks!
 
 pod 'Alamofire'
 pod 'SwiftyJSON'
+pod 'ObjectMapper'
 ```
 
 Then, run the following command:
@@ -82,29 +83,30 @@ lazy var users: [User] = {
 
 ```swift
 class SignInResult: ROJSONObject {
-    var access_token: String! {
-        return Value<String>.get(self, key: "access_token")
-    }
+    var access_token: String?
+    var user: User?
     
-    lazy var user: User! = {
-        return Value<User>.getROJSONOject(self, key: "user")
-    }()
+    override func mapping(map: Map) {
+        access_token <- map["access_token"]
+        user <- map["user"]
+    }
 }
 ```
 ```swift
 class User: ROJSONObject {
 
-    var email: String! {
-        return Value<String>.get(self, key: "email")
+    var email: String = ""
+    var first_name: String = ""
+    var last_name: String = ""
+    
+    
+    override func mapping(map: Map) {
+        
+        email <- map["email"]
+        first_name <- map["first_name"]
+        last_name <- map["last_name"]
     }
     
-    var first_name: String! {
-        return Value<String>.get(self, key: "first_name")
-    }
-    
-    var last_name: String! {
-        return Value<String>.get(self, key: "last_name")
-    }
 }
 ```
 

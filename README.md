@@ -51,32 +51,6 @@ $ pod install
 
 If you prefer not to use either of the aforementioned dependency managers, you can integrate Alamofire and SwwiftyJSON into your project manually.
 
-## How to map JSON to Object
-
-### Map normal data type: Int, Float, Double, String...
-
-```swift
-var email: String! {
-    return Value<String>.get(self, key: "email")
-}
-```
-
-### Map ROJSONObject
-
-```swift
-lazy var user: User! = {
-    return Value<User>.getROJSONOject(self, key: "user")
-}()
-```
-
-### Map Array of Objects
-
-```swift
-lazy var users: [User] = {
-    return Value<[User]>.getArray(self, key: "users")
-}()
-```
-
 ## Usage
 
 ### Create data model `SignInResult`

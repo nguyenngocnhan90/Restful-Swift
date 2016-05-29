@@ -22,27 +22,16 @@ class RESTError: NSObject {
         errorFromResponse = error.userInfo["NSDebugDescription"] as? String
     }
     
-    static func parseError(responseData: NSData?, error: ErrorType?) -> RESTError {
-        
-        let restError = RESTError.init()
-        
+    init(responseData: NSData?, error: ErrorType?) {
         if (responseData != nil) {
-            let jsonObj: JSON = JSON(data: responseData!)
+            let jsonObj = JSON(data: responseData!)
             
             if (jsonObj != nil) {
-                let errorJson: JSON = jsonObj["error"]
-                
-                let message = errorJson[RESTContants.kRESTMessageKeyFromResponseData].stringValue
-                
-                if(message.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0) {
-                    restError.errorFromServer = message
-                }
-                else {
-                    restError.errorFromServer = RESTContants.kRESTDefaultMessageKeyFromResponseData
-                }
+                let message = jsonObj["error"].stringValue
+                self.errorFromServer = message
             }
             else {
-                restError.errorFromServer = NSString(data: responseData!, encoding: NSUTF8StringEncoding) as String?
+                self.errorFromServer = NSString(data: responseData!, encoding: NSUTF8StringEncoding) as String?
             }
         }
         
@@ -50,10 +39,8 @@ class RESTError: NSObject {
             let castError: NSError = error as NSError!
             let errorString: String! = castError.localizedDescription
             
-            restError.errorFromResponse = errorString
+            self.errorFromResponse = errorString
         }
-        
-        return restError
     }
     
     init(errorType: ErrorType) {
@@ -64,4 +51,17 @@ class RESTError: NSObject {
         
         restError.errorFromResponse = errorString
     }
+    
+}
+
+extension RESTError {
+    
+    func isInvalidPermission() -> Bool {
+        if let errorFromResponse = errorFromResponse {
+            return errorFromResponse.containsString("Access token is invalid")
+        }
+        
+        return false
+    }
+    
 }

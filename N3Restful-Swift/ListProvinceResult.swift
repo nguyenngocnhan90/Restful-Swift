@@ -7,10 +7,14 @@
 //
 
 import UIKit
+import ObjectMapper
 
 class ListProvinceResult: RESTObject {
 
-    lazy var provinces: [Province] = {
-        return Value<[Province]>.getArray(self, key: "provinces")
-    }()
+    var provinces: [Province]?
+    
+    override func mapping(map: Map) {
+        provinces <- map["provinces"]
+    }
+    
 }

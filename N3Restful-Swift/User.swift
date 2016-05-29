@@ -7,18 +7,20 @@
 //
 
 import UIKit
+import ObjectMapper
 
 class User: RESTObject {
 
-    var email: String! {
-        return Value<String>.get(self, key: "email")
+    var email: String = ""
+    var first_name: String = ""
+    var last_name: String = ""
+    
+    
+    override func mapping(map: Map) {
+        
+        email <- map["email"]
+        first_name <- map["first_name"]
+        last_name <- map["last_name"]
     }
     
-    var first_name: String! {
-        return Value<String>.get(self, key: "first_name")
-    }
-    
-    var last_name: String! {
-        return Value<String>.get(self, key: "last_name")
-    }
 }

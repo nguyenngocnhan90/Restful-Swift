@@ -27,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let addressInvoker = AddressInvoker()
         
         addressInvoker.getListAddress { (listProvinces, error) -> Void in
-            print(listProvinces?.provinces[0].name)
+            print(listProvinces?.provinces?[0].name)
         }
     }
     
@@ -35,8 +35,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let sessionInvoker = SessionInvoker()
         
         let param = SignInParam()
-        param.email = "nguyenngocnhan90@yopmail.com"
-        param.password = "ngocnhan"
+        param.email = "ngocnhan90@yopmail.com"
+        param.password = "password"
         
         sessionInvoker.signIn(param) { (result, error) -> Void in
             print((result?.user)!)

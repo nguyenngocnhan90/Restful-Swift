@@ -7,13 +7,15 @@
 //
 
 import UIKit
+import ObjectMapper
 
 class SignInResult: RESTObject {
-    var access_token: String! {
-        return Value<String>.get(self, key: "access_token")
-    }
+    var access_token: String?
+    var user: User?
     
-    lazy var user: User! = {
-        return Value<User>.getJSONOject(self, key: "user")
-    }()
+    override func mapping(map: Map) {
+        access_token <- map["access_token"]
+        user <- map["user"]
+        
+    }
 }

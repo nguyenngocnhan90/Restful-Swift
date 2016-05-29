@@ -1,112 +1,69 @@
 //
-//  JSONObject.swift
-//  RASCOcloud
+//  RESTObject.swift
+//  Lixibox
 //
-//  Created by Robin Oster on 02/07/14.
-//  Copyright (c) 2014 Robin Oster. All rights reserved.
+//  Created by Nhan Nguyen on 4/14/16.
+//  Copyright © 2016 Nhan Nguyen. All rights reserved.
 //
 
-import Foundation
-import SwiftyJSON
+import UIKit
+import ObjectMapper
 
-class RESTObject {
+class RESTObject: NSObject {
     
-    var jsonData:JSON
-
-    required init() {
-        jsonData = []
+    var rawValue: String?
+    var statusCode = 0
+    
+    override init() {
+        super.init()
     }
     
-    required init(jsonData: AnyObject) {
-        self.jsonData = JSON(jsonData)
-    }
-    
-    required init(jsonString:String) {
-        let data = jsonString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
-        var error:NSError?
+    required init?(_ map: Map) {
         
-        if let _ = data {
-            var json: AnyObject? = nil
-            
-            do {
-                json = try NSJSONSerialization.JSONObjectWithData(data!, options: [])
-            } catch let error1 as NSError {
-                error = error1
-                json = nil
-            }
-            
-            if (error != nil) {
-                print("Something went wrong during the creation of the json dict \(error)")
-            }
-            else {
-                self.jsonData = JSON(json!)
-                return
-            }
-        }
-        
-        self.jsonData = JSON("")
-    }
-
-    func getJSONValue(key:String) -> JSON {
-        return jsonData[key]
     }
     
-    func getValue(key:String) -> AnyObject {
-        return jsonData[key].object
+    func mapping(map: Map) {
+        
     }
     
-    func getArray<T : RESTObject>(key:String) -> [T] {
-        var elements = [T]()
-        
-        for jsonValue in getJSONValue(key).array! {
-            let element = (T.self as T.Type).init()
-            
-            element.jsonData = jsonValue
-            elements.append(element)
-        }
-        
-        return elements
-    }
-    
-    func getDate(key:String, dateFormatter:NSDateFormatter? = nil) -> NSDate? {
-        // TODO: implement your own data parsing
-        return nil
-    }
 }
 
-class Value<T> {
-    class func get(rojsonobject:RESTObject, key:String) -> T {
-        let obj = rojsonobject.getValue(key)
-        return obj as! T
+extension RESTObject: Mappable {
+    
+    func toString() -> String? {
+        return rawValue
     }
     
-    class func getJSONOject<T : RESTObject>(rojsonobject:RESTObject, key:String) -> T! {
-        let object = (T.self as T.Type).init()
-        object.jsonData = rojsonobject.getJSONValue(key)
-        
-        return object
-    }
-    
-    class func getArray<T : RESTObject>(rojsonobject: RESTObject, key:String? = nil) -> [T] {
-        
-        // If there is a key given fetch the array from the dictionary directly if not fetch all objects and pack it into an array
-        if let dictKey = key {
-            return rojsonobject.getArray(dictKey) as [T]
+    func toBool() -> Bool {
+        if let string = toString() {
+            return string == "true" || string == "1"
         }
-        else {
-            var objects = [T]()
-            
-            for jsonValue in rojsonobject.jsonData.array! {
-                let object = (T.self as T.Type).init()
-                object.jsonData = jsonValue
-                objects.append(object)
-            }
-            
-            return objects
-        }
+        
+        return false
     }
     
-    class func getDate(rojsonobject: RESTObject, key:String, dateFormatter:NSDateFormatter? = nil) -> NSDate? {
-        return rojsonobject.getDate(key, dateFormatter: dateFormatter)
+    func toInt() -> Int {
+        if let string = toString() {
+            return Int(string)!
+        }
+        
+        return 0
     }
+    
+    func toFloat() -> Float {
+        if let string = toString() {
+            return Float(string)!
+        }
+        
+        return 0
+    }
+    
+    func toDouble() -> Double {
+        if let string = toString() {
+            return Double(string)!
+        }
+        
+        return 0
+    }
+    
 }

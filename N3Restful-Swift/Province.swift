@@ -7,38 +7,24 @@
 //
 
 import UIKit
+import ObjectMapper
 
 class Province: RESTObject {
     
-    var id: Int {
-        return Value<Int>.get(self, key: "id")
+    var id: Int = 0
+    
+    var name: String = ""
+    var full_name: String = ""
+    var unit: String = ""
+    var districts: [District]?
+    
+    override func mapping(map: Map) {
+        id <- map["id"]
+        
+        name <- map["name"]
+        full_name <- map["full_name"]
+        unit <- map["unit"]
+        districts <- map["districts"]
     }
     
-    var name: String! {
-        return Value<String>.get(self, key: "name")
-    }
-    
-    var full_name: String! {
-        return Value<String>.get(self, key: "full_name")
-    }
-    
-    var unit: String! {
-        return Value<String>.get(self, key: "unit")
-    }
-    
-    lazy var districts: [District] = {
-        return Value<[District]>.getArray(self, key: "districts")
-    }()
-
-    required init() {
-        super.init()
-    }
-
-    required init(jsonData: AnyObject) {
-        super.init(jsonData: jsonData)
-    }
-
-    required init(jsonString: String) {
-        super.init(jsonString: jsonString)
-    }
 }

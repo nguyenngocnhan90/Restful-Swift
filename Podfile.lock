@@ -1,16 +1,28 @@
 PODS:
-  - Alamofire (3.3.0)
-  - ObjectMapper (1.3.0)
-  - SwiftyJSON (2.3.2)
+  - Alamofire (3.5.1)
+  - ObjectMapper (1.5.0)
+  - SwiftyJSON (2.4.0)
 
 DEPENDENCIES:
   - Alamofire
-  - ObjectMapper
-  - SwiftyJSON
+  - ObjectMapper (~> 1.2)
+  - SwiftyJSON (from `https://github.com/SwiftyJSON/SwiftyJSON.git`, branch `swift2`)
+
+EXTERNAL SOURCES:
+  SwiftyJSON:
+    :branch: swift2
+    :git: https://github.com/SwiftyJSON/SwiftyJSON.git
+
+CHECKOUT OPTIONS:
+  SwiftyJSON:
+    :commit: 54017d514a87b2b855b407131292c510cdeb65f8
+    :git: https://github.com/SwiftyJSON/SwiftyJSON.git
 
 SPEC CHECKSUMS:
-  Alamofire: 9054db4a1b1ca9e363223183e01cea380159a27c
-  ObjectMapper: 4eb08a726e9791a93b2632049951b56a7c17e471
-  SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
+  Alamofire: 0dfba1184a543e2aa160f4e39cac4e8aba48d223
+  ObjectMapper: 386645adca9d9d23b95eda43090b09d66444cf14
+  SwiftyJSON: 96918c1bf505efa50c4f72957018dd3452090c9c
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: f5e8cf2d8fbac5da026d3b0ac21141f1f2b3f436
+
+COCOAPODS: 1.0.1

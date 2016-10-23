@@ -14,7 +14,7 @@ class UserInvoker: BaseInvoker {
         super.init(controllerName: "users")
     }
     
-    func uploadAvatar(completion: (success: Bool, error: RESTError?) -> Void) {
+    func uploadAvatar(_ completion: @escaping (_ success: Bool, _ error: RESTError?) -> Void) {
         let request = requestWithMethodName("update_avatar")
         
         let image = UIImage(named: "my_avatar")
@@ -25,10 +25,10 @@ class UserInvoker: BaseInvoker {
         request.POST_Multipart { (object, error) -> () in
             if error != nil {
                 print(error)
-                completion(success: false, error: error)
+                completion(false, error)
             }
             else {
-                completion(success: true, error: nil)
+                completion(true, nil)
             }
         }
     }

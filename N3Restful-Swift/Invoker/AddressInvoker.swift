@@ -14,12 +14,12 @@ class AddressInvoker: BaseInvoker {
         super.init(controllerName: "addresses")
     }
 
-    func getListAddress(completion: (listProvinces: ListProvinceResult?, error: RESTError?) -> Void) {
+    func getListAddress(_ completion: @escaping (_ listProvinces: ListProvinceResult?, _ error: RESTError?) -> Void) {
         let request = requestWithMethodName(nil)
-        request.addQueryParam("updated_at", value: "\(0)")
+        request.addQueryParam("updated_at", value: "\(0)" as AnyObject)
         
         request.GET { (object: ListProvinceResult?, error) -> () in
-            completion(listProvinces: object, error: error)
+            completion(object, error)
         }
     }
 }

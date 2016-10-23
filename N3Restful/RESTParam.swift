@@ -16,27 +16,27 @@ class RESTParam: NSObject {
         
         // add values
         for prop in self.propertyNames() {
-            let val = self.valueForKey(prop)
+            let val = self.value(forKey: prop)
             
             if (val is String)
             {
-                dict[prop] = val as! String
+                dict[prop] = val as! String as AnyObject?
             }
             else if (val is Int)
             {
-                dict[prop] = val as! Int
+                dict[prop] = val as! Int as AnyObject?
             }
             else if (val is Double)
             {
-                dict[prop] = val as! Double
+                dict[prop] = val as! Double as AnyObject?
             }
             else if (val is Array<String>)
             {
-                dict[prop] = val as! Array<String>
+                dict[prop] = val as! Array<String> as AnyObject?
             }
             else if (val is RESTParam)
             {
-                dict[prop] = val?.toDictionary()
+                dict[prop] = (val as AnyObject).toDictionary as AnyObject?
             }
             else if (val is Array<RESTParam>)
             {
@@ -46,7 +46,7 @@ class RESTParam: NSObject {
                     arr.append(item.toDictionary())
                 }
                 
-                dict[prop] = arr
+                dict[prop] = arr as AnyObject?
             }
         }
         
@@ -60,10 +60,10 @@ class RESTParam: NSObject {
         
         // make JSON
         var error:NSError? = nil
-        var data: NSData? = nil
+        var data: Data? = nil
         
         do {
-            try data = NSJSONSerialization.dataWithJSONObject(dict, options:NSJSONWritingOptions(rawValue: 0))
+            try data = JSONSerialization.data(withJSONObject: dict, options:JSONSerialization.WritingOptions(rawValue: 0))
         }
         catch let err as NSError {
             error = err
@@ -74,7 +74,7 @@ class RESTParam: NSObject {
         }
         
         // return result
-        return String(data: data!, encoding: NSUTF8StringEncoding)
+        return String(data: data!, encoding: String.Encoding.utf8)
     }
     
 }
@@ -91,14 +91,14 @@ extension NSObject {
         
         // iterate each objc_property_t struct
         for i in 0..<count {
-            let property = properties[Int(i)]
+            let property = properties?[Int(i)]
             
             // retrieve the property name by calling property_getName function
             let cname = property_getName(property)
             
             // covert the c string into a Swift string
-            let name = String.fromCString(cname)
-            results.append(name!)
+            let name = String(cString: cname!)
+            results.append(name)
         }
         
         // release objc_property_t structs

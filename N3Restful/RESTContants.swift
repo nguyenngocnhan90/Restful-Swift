@@ -9,12 +9,12 @@
 import Foundation
 
 public enum RESTStatusCode: Int {
-    case Success = 200
-    case NotFound = 404
-    case BadRequest = 400
-    case InternalServerError = 500
-    case BadGateWay = 502
-    case ServiceUnavailable = 503
+    case success = 200
+    case notFound = 404
+    case badRequest = 400
+    case internalServerError = 500
+    case badGateWay = 502
+    case serviceUnavailable = 503
 }
 
 class RESTContants: NSObject {

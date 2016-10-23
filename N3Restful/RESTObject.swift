@@ -18,7 +18,7 @@ class RESTObject: NSObject {
         super.init()
     }
     
-    required init?(_ map: Map) {
+    required init?(map: Map) {
         
     }
     

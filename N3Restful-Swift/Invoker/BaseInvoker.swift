@@ -22,7 +22,7 @@ class BaseInvoker: NSObject {
         baseURL = url
     }
     
-    func requestWithMethodName(methodName: String!) -> RESTRequest {
+    func requestWithMethodName(_ methodName: String!) -> RESTRequest {
         var url = baseURL
         
         if methodName != nil {

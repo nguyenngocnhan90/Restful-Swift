@@ -14,20 +14,20 @@ class SessionInvoker: BaseInvoker {
         super.init(controllerName: "sessions")
     }
     
-    func signIn(param: SignInParam, completion: (result: SignInResult?, error: RESTError?) -> Void) {
+    func signIn(_ param: SignInParam, completion: @escaping (_ result: SignInResult?, _ error: RESTError?) -> Void) {
         let request = requestWithMethodName(nil)
         
         request.POST(param) { (result: SignInResult?, error) -> () in
-            completion(result: result, error: error)
+            completion(result, error)
         }
     }
     
-    func signInFacebook(fbToken: String, completion: (result: SignInResult?, error: RESTError?) -> Void) {
+    func signInFacebook(_ fbToken: String, completion: @escaping (_ result: SignInResult?, _ error: RESTError?) -> Void) {
         let request = requestWithMethodName("facebook")
         let dictionary = ["facebook_token": fbToken]
         
-        request.requestWithDictionary(dictionary, method: .POST) { (result: SignInResult?, error) -> () in
-            completion(result: result, error: error)
+        request.requestWithDictionary(dictionary as [String : AnyObject]!, method: .post) { (result: SignInResult?, error) -> () in
+            completion(result, error)
         }
     }
 }

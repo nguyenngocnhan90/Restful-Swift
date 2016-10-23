@@ -22,7 +22,7 @@ class RESTError: NSObject {
         errorFromResponse = error.userInfo["NSDebugDescription"] as? String
     }
     
-    init(responseData: NSData?, error: ErrorType?) {
+    init(responseData: Data?, error: Error?) {
         if (responseData != nil) {
             let jsonObj = JSON(data: responseData!)
             
@@ -31,7 +31,7 @@ class RESTError: NSObject {
                 self.errorFromServer = message
             }
             else {
-                self.errorFromServer = NSString(data: responseData!, encoding: NSUTF8StringEncoding) as String?
+                self.errorFromServer = NSString(data: responseData!, encoding: String.Encoding.utf8.rawValue) as String?
             }
         }
         
@@ -43,7 +43,7 @@ class RESTError: NSObject {
         }
     }
     
-    init(errorType: ErrorType) {
+    init(errorType: Error) {
         let restError = RESTError.init()
         
         let castError: NSError = errorType as NSError!
@@ -58,7 +58,7 @@ extension RESTError {
     
     func isInvalidPermission() -> Bool {
         if let errorFromResponse = errorFromResponse {
-            return errorFromResponse.containsString("Access token is invalid")
+            return errorFromResponse.contains("Access token is invalid")
         }
         
         return false

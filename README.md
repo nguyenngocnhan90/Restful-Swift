@@ -56,7 +56,7 @@ If you prefer not to use either of the aforementioned dependency managers, you c
 ### Create data model `SignInResult`
 
 ```swift
-class SignInResult: ROJSONObject {
+class SignInResult: RESTObject {
     var access_token: String?
     var user: User?
     
@@ -67,7 +67,7 @@ class SignInResult: ROJSONObject {
 }
 ```
 ```swift
-class User: ROJSONObject {
+class User: RESTObject {
 
     var email: String = ""
     var first_name: String = ""

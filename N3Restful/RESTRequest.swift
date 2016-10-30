@@ -96,7 +96,7 @@ class RESTRequest: NSObject {
     - parameter objectBody: object param - type RESTParam
     - parameter completion: callback result
     */
-    func POST<T: RESTObject>(bodyParam param: RESTParam!, completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
+    func POST<T: RESTObject>(bodyParam param: RESTParam?, completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
         request(bodyParam: param, method: .post) { (object: T?, error) -> () in
             completion(object, error)
         }
@@ -108,7 +108,7 @@ class RESTRequest: NSObject {
      - parameter objectBody: object param - type RESTParam
      - parameter completion: callback result
      */
-    func PUT<T: RESTObject>(bodyParam param: RESTParam!, completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
+    func PUT<T: RESTObject>(bodyParam param: RESTParam?, completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
         request(bodyParam: param, method: .put) { (object: T?, error) -> () in
             completion(object, error)
         }
@@ -120,7 +120,7 @@ class RESTRequest: NSObject {
      - parameter objectBody: object param - type RESTParam
      - parameter completion: callback result
      */
-    func PATCH<T: RESTObject>(bodyParam param: RESTParam!, completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
+    func PATCH<T: RESTObject>(bodyParam param: RESTParam?, completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
         request(bodyParam: param, method: .patch)
         { (object: T?, error) -> () in
             completion(object, error)
@@ -133,7 +133,7 @@ class RESTRequest: NSObject {
      - parameter objectBody: object param - type RESTParam
      - parameter completion: callback result
      */
-    func DELETE<T: RESTObject>(bodyParam param: RESTParam!, completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
+    func DELETE<T: RESTObject>(bodyParam param: RESTParam?, completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
         request(bodyParam: param, method: .delete) { (object: T?, error) -> () in
             completion(object, error)
         }
@@ -293,7 +293,7 @@ class RESTRequest: NSObject {
                 case .failure(let error):
                     print(error)
                     
-                    let restError = RESTError(errorType: error)
+                    let restError = RESTError(error: error)
                     completion(nil, restError)
                     
                     break

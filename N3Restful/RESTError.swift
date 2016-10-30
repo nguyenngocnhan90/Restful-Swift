@@ -18,10 +18,6 @@ class RESTError: NSObject {
         errorFromResponse = ""
     }
     
-    init(error: NSError) {
-        errorFromResponse = error.userInfo["NSDebugDescription"] as? String
-    }
-    
     init(responseData: Data?, error: Error?) {
         if (responseData != nil) {
             let jsonObj = JSON(data: responseData!)
@@ -43,10 +39,10 @@ class RESTError: NSObject {
         }
     }
     
-    init(errorType: Error) {
+    init(error: Error) {
         let restError = RESTError.init()
         
-        let castError: NSError = errorType as NSError!
+        let castError: NSError = error as NSError!
         let errorString: String! = castError.localizedDescription
         
         restError.errorFromResponse = errorString

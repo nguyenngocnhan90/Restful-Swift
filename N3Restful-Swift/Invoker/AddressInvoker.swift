@@ -18,7 +18,7 @@ class AddressInvoker: BaseInvoker {
         let request = requestWithMethodName(nil)
         request.addQueryParam("updated_at", value: "\(0)" as AnyObject)
         
-        request.GET { (object: ListProvinceResult?, error) -> () in
+        request.get { (object: ListProvinceResult?, error) -> () in
             completion(object, error)
         }
     }

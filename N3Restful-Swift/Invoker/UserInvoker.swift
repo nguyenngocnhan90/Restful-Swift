@@ -22,7 +22,7 @@ class UserInvoker: BaseInvoker {
         request.addFilePart("avatar", fileName: "avatar.jpg", data: imageData)
         request.addStringPart("access_token", string: "PvFxFyvcKrzLW3HF6FUV")
         
-        request.POST_Multipart { (object, error) -> () in
+        request.postMultipart { (object, error) -> () in
             if error != nil {
                 print(error)
                 completion(false, error)

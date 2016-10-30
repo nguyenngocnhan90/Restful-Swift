@@ -17,7 +17,7 @@ class SessionInvoker: BaseInvoker {
     func signIn(_ param: SignInParam, completion: @escaping (_ result: SignInResult?, _ error: RESTError?) -> Void) {
         let request = requestWithMethodName(nil)
         
-        request.POST(bodyParam: param) { (result: SignInResult?, error) -> () in
+        request.post(bodyParam: param) { (result: SignInResult?, error) -> () in
             completion(result, error)
         }
     }

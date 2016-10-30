@@ -35,7 +35,7 @@ class RESTRequest: NSObject {
      
      - parameter completion: callback result
      */
-    func GET<T: RESTObject>(_ completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
+    func get<T: RESTObject>(_ completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
         appendQueryParamsToURL()
         
         Alamofire.request(url)
@@ -66,7 +66,7 @@ class RESTRequest: NSObject {
         }
     }
     
-    func GETArray<T: RESTObject>(_ completion:@escaping (_ result: [T]?, _ error: RESTError?) -> ()) {
+    func getArray<T: RESTObject>(_ completion:@escaping (_ result: [T]?, _ error: RESTError?) -> ()) {
         appendQueryParamsToURL()
         
         Alamofire.request(url)
@@ -96,7 +96,7 @@ class RESTRequest: NSObject {
     - parameter objectBody: object param - type RESTParam
     - parameter completion: callback result
     */
-    func POST<T: RESTObject>(bodyParam param: RESTParam?, completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
+    func post<T: RESTObject>(bodyParam param: RESTParam?, completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
         request(bodyParam: param, method: .post) { (object: T?, error) -> () in
             completion(object, error)
         }
@@ -108,7 +108,7 @@ class RESTRequest: NSObject {
      - parameter objectBody: object param - type RESTParam
      - parameter completion: callback result
      */
-    func PUT<T: RESTObject>(bodyParam param: RESTParam?, completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
+    func put<T: RESTObject>(bodyParam param: RESTParam?, completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
         request(bodyParam: param, method: .put) { (object: T?, error) -> () in
             completion(object, error)
         }
@@ -120,7 +120,7 @@ class RESTRequest: NSObject {
      - parameter objectBody: object param - type RESTParam
      - parameter completion: callback result
      */
-    func PATCH<T: RESTObject>(bodyParam param: RESTParam?, completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
+    func patch<T: RESTObject>(bodyParam param: RESTParam?, completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
         request(bodyParam: param, method: .patch)
         { (object: T?, error) -> () in
             completion(object, error)
@@ -133,7 +133,7 @@ class RESTRequest: NSObject {
      - parameter objectBody: object param - type RESTParam
      - parameter completion: callback result
      */
-    func DELETE<T: RESTObject>(bodyParam param: RESTParam?, completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
+    func delete<T: RESTObject>(bodyParam param: RESTParam?, completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
         request(bodyParam: param, method: .delete) { (object: T?, error) -> () in
             completion(object, error)
         }
@@ -207,7 +207,7 @@ class RESTRequest: NSObject {
     
     - parameter completion: callback result
     */
-    func POST_Multipart<T: RESTObject>(_ completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
+    func postMultipart<T: RESTObject>(_ completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
         upload(.post) { (object: T?, error) -> () in
             completion(object, error)
         }
@@ -218,11 +218,10 @@ class RESTRequest: NSObject {
      
      - parameter completion: callback result
      */
-    func PUT_Multipart<T: RESTObject>(_ completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
+    func putMultipart<T: RESTObject>(_ completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
         upload(.put) { (object: T?, error) -> () in
             completion(object, error)
         }
-
     }
     
     /**
@@ -230,7 +229,7 @@ class RESTRequest: NSObject {
      
      - parameter completion: callback result
      */
-    func PATCH_Multipart<T: RESTObject>(_ completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
+    func patchMultipart<T: RESTObject>(_ completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
         upload(.patch) { (object: T?, error) -> () in
             completion(object, error)
         }
@@ -367,7 +366,7 @@ extension RESTRequest {
 
 extension RESTRequest {
     
-    func appendQueryParamsToURL() {
+    fileprivate func appendQueryParamsToURL() {
         var query: String = ""
         
         for (key, value) in self.parameters {

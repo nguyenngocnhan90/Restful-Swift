@@ -17,7 +17,7 @@ class SessionInvoker: BaseInvoker {
     func signIn(_ param: SignInParam, completion: @escaping (_ result: SignInResult?, _ error: RESTError?) -> Void) {
         let request = requestWithMethodName(nil)
         
-        request.POST(param) { (result: SignInResult?, error) -> () in
+        request.POST(bodyParam: param) { (result: SignInResult?, error) -> () in
             completion(result, error)
         }
     }
@@ -26,7 +26,7 @@ class SessionInvoker: BaseInvoker {
         let request = requestWithMethodName("facebook")
         let dictionary = ["facebook_token": fbToken]
         
-        request.requestWithDictionary(dictionary as [String : AnyObject]!, method: .post) { (result: SignInResult?, error) -> () in
+        request.request(dictionary: dictionary as [String : Any]!, method: .post) { (result: SignInResult?, error) -> () in
             completion(result, error)
         }
     }

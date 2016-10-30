@@ -14,7 +14,7 @@ class RESTRequest: NSObject {
     
     var url: String!
     
-    var parameters: [String: AnyObject] = [:]
+    var parameters: [String: Any] = [:]
     var headers: [String: String] = [:]
     var multiparts: [RESTMultipart] = []
     
@@ -22,7 +22,7 @@ class RESTRequest: NSObject {
         self.url = url
     }
     
-    class func requestWithURL(_ url: String) -> RESTRequest {
+    class func request(with url: String) -> RESTRequest {
         let request = RESTRequest(url: url)
         return request
     }
@@ -95,8 +95,8 @@ class RESTRequest: NSObject {
     - parameter objectBody: object param - type RESTParam
     - parameter completion: callback result
     */
-    func POST<T: RESTObject>(_ objectBody: RESTParam!, completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
-        requestWithObjectBody(objectBody, method: .post) { (object: T?, error) -> () in
+    func POST<T: RESTObject>(bodyParam param: RESTParam!, completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
+        request(bodyParam: param, method: .post) { (object: T?, error) -> () in
             completion(object, error)
         }
     }
@@ -107,8 +107,8 @@ class RESTRequest: NSObject {
      - parameter objectBody: object param - type RESTParam
      - parameter completion: callback result
      */
-    func PUT<T: RESTObject>(_ objectBody: RESTParam!, completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
-        requestWithObjectBody(objectBody, method: .put) { (object: T?, error) -> () in
+    func PUT<T: RESTObject>(bodyParam param: RESTParam!, completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
+        request(bodyParam: param, method: .put) { (object: T?, error) -> () in
             completion(object, error)
         }
     }
@@ -119,8 +119,8 @@ class RESTRequest: NSObject {
      - parameter objectBody: object param - type RESTParam
      - parameter completion: callback result
      */
-    func PATCH<T: RESTObject>(_ objectBody: RESTParam!, completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
-        requestWithObjectBody(objectBody, method: .patch)
+    func PATCH<T: RESTObject>(bodyParam param: RESTParam!, completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
+        request(bodyParam: param, method: .patch)
         { (object: T?, error) -> () in
             completion(object, error)
         }
@@ -132,8 +132,8 @@ class RESTRequest: NSObject {
      - parameter objectBody: object param - type RESTParam
      - parameter completion: callback result
      */
-    func DELETE<T: RESTObject>(_ objectBody: RESTParam!, completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
-        requestWithObjectBody(objectBody, method: .delete) { (object: T?, error) -> () in
+    func DELETE<T: RESTObject>(bodyParam param: RESTParam!, completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
+        request(bodyParam: param, method: .delete) { (object: T?, error) -> () in
             completion(object, error)
         }
     }
@@ -145,10 +145,10 @@ class RESTRequest: NSObject {
      - parameter method:
      - parameter completion: call back
      */
-    fileprivate func requestWithObjectBody<T: RESTObject>(_ objectBody: RESTParam?, method: Alamofire.HTTPMethod, completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
+    fileprivate func request<T: RESTObject>(bodyParam objectBody: RESTParam?, method: Alamofire.HTTPMethod, completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
         let dictionary = objectBody?.toDictionary()
         
-        requestWithDictionary(dictionary, method: method) { (result: T?, error) -> () in
+        request(dictionary: dictionary, method: method) { (result: T?, error) -> () in
             completion(result, error)
         }
     }
@@ -160,41 +160,40 @@ class RESTRequest: NSObject {
      - parameter method:          request method
      - parameter completion:      callback result
      */
-    func requestWithDictionary<T: RESTObject>(_ dictionaryParam: [String: AnyObject]?, method: Alamofire.HTTPMethod, completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
+    func request<T: RESTObject>(dictionary param: [String: Any]?, method: Alamofire.HTTPMethod, completion:@escaping (_ result: T?, _ error: RESTError?) -> ()) {
         appendQueryParamsToURL()
         
-        if let dictionaryParam = dictionaryParam {
-            self.parameters = dictionaryParam
+        if let param = param {
+            parameters = param
         }
         
-        Alamofire.request(
-            url,
-            method,
-            parameters: self.parameters,
-            encoding: ParameterEncoding.JSON,
+        Alamofire.request(url,
+            method: method,
+            parameters: parameters,
+            encoding: JSONEncoding.default,
             headers: self.headers)
             .validate(statusCode: 200..<400)
             .responseJSON { (response) -> Void in
                 
                 switch response.result {
                 case .success (let json):
-                    guard let object = Mapper<T>().map(JSON: json) else {
+                    guard let object = Mapper<T>().map(JSON: json as! [String : Any]) else {
                         let restObj = RESTObject()
                         restObj.rawValue = "\(json)"
                         restObj.statusCode = (response.response?.statusCode)!
                         
-                        completion(result: restObj as? T, error: nil)
+                        completion(restObj as? T, nil)
                         return
                     }
                     
                     object.statusCode = (response.response?.statusCode)!
                     debugPrint(object)
-                    completion(result: object, error: nil)
+                    completion(object, nil)
                     
                 case .failure (let error):
                     let restError = RESTError(responseData: response.data, error: error)
                     debugPrint(restError.errorFromServer)
-                    completion(result: nil, error: restError)
+                    completion(nil, restError)
                 }
         }
     }
@@ -315,7 +314,7 @@ extension RESTRequest {
         self.parameters[name] = "\(value)" as AnyObject?
     }
     
-    func addJsonPart(_ name: String!, json: NSDictionary!) {
+    func addJsonPart(_ name: String, json: NSDictionary) {
         let part: RESTMultipart! = RESTMultipart.JSONPart(name: name, jsonObject: json)
         
         if part != nil {
@@ -323,7 +322,7 @@ extension RESTRequest {
         }
     }
     
-    func addFilePart(_ name: String!, fileName: String!, data: Data!) {
+    func addFilePart(_ name: String, fileName: String, data: Data!) {
         let part: RESTMultipart! = RESTMultipart.FilePart(name: name, fileName: fileName, data: data)
         
         if part != nil {
@@ -331,7 +330,7 @@ extension RESTRequest {
         }
     }
     
-    func addStringPart(_ name: String!, string: String!) {
+    func addStringPart(_ name: String, string: String) {
         let part: RESTMultipart! = RESTMultipart.StringPart(name: name, string: string)
         
         if part != nil {

@@ -48,13 +48,13 @@ class RESTRequest: NSObject {
                         let object = Mapper<T>().map(JSON: dictionary) else {
                         let restObj = RESTObject()
                         restObj.rawValue = "\(json)"
-                        restObj.statusCode = (response.response?.statusCode)!
+                        restObj.statusCode = RESTStatusCode(rawValue: (response.response?.statusCode ?? 500))
                         
                         completion(restObj as? T, nil)
                         return
                     }
                     
-                    object.statusCode = (response.response?.statusCode)!
+                    object.statusCode = RESTStatusCode(rawValue: (response.response?.statusCode ?? 500))
                     debugPrint(object)
                     completion(object, nil)
                     
@@ -182,13 +182,13 @@ class RESTRequest: NSObject {
                         let object = Mapper<T>().map(JSON: dictionary) else {
                         let restObj = RESTObject()
                         restObj.rawValue = "\(json)"
-                        restObj.statusCode = (response.response?.statusCode)!
+                        restObj.statusCode = RESTStatusCode(rawValue: (response.response?.statusCode ?? 500))
                         
                         completion(restObj as? T, nil)
                         return
                     }
                     
-                    object.statusCode = (response.response?.statusCode)!
+                    object.statusCode = RESTStatusCode(rawValue: (response.response?.statusCode ?? 500))
                     debugPrint(object)
                     completion(object, nil)
                     
@@ -269,13 +269,13 @@ class RESTRequest: NSObject {
                                     let object = Mapper<T>().map(JSON: dictionary) else {
                                     let restObj = RESTObject()
                                     restObj.rawValue = "\(json)"
-                                    restObj.statusCode = (response.response?.statusCode)!
+                                    restObj.statusCode = RESTStatusCode(rawValue: (response.response?.statusCode ?? 500))
                                     
                                     completion(restObj as? T, nil)
                                     return
                                 }
                                 
-                                object.statusCode = (response.response?.statusCode)!
+                                object.statusCode = RESTStatusCode(rawValue: (response.response?.statusCode ?? 500))
                                 debugPrint(object)
                                 completion(object, nil)
                                 

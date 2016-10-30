@@ -44,7 +44,8 @@ class RESTRequest: NSObject {
                 
                 switch response.result {
                 case .success (let json):
-                    guard let object = Mapper<T>().map(JSON: json as! [String : Any]) else {
+                    guard let dictionary = json as? [String : Any],
+                        let object = Mapper<T>().map(JSON: dictionary) else {
                         let restObj = RESTObject()
                         restObj.rawValue = "\(json)"
                         restObj.statusCode = (response.response?.statusCode)!
@@ -177,7 +178,8 @@ class RESTRequest: NSObject {
                 
                 switch response.result {
                 case .success (let json):
-                    guard let object = Mapper<T>().map(JSON: json as! [String : Any]) else {
+                    guard let dictionary = json as? [String : Any],
+                        let object = Mapper<T>().map(JSON: dictionary) else {
                         let restObj = RESTObject()
                         restObj.rawValue = "\(json)"
                         restObj.statusCode = (response.response?.statusCode)!
@@ -263,7 +265,8 @@ class RESTRequest: NSObject {
                             
                             switch response.result {
                             case .success (let json):
-                                guard let object = Mapper<T>().map(JSON: json as! [String : Any]) else {
+                                guard let dictionary = json as? [String : Any],
+                                    let object = Mapper<T>().map(JSON: dictionary) else {
                                     let restObj = RESTObject()
                                     restObj.rawValue = "\(json)"
                                     restObj.statusCode = (response.response?.statusCode)!

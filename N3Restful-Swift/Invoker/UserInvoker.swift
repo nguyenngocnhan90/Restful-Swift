@@ -15,12 +15,12 @@ class UserInvoker: BaseInvoker {
     }
     
     func uploadAvatar(_ completion: @escaping (_ success: Bool, _ error: RESTError?) -> Void) {
-        let request = requestWithMethodName("update_avatar")
+        let request = requestWithMethodName("change_avatar")
         
         let image = UIImage(named: "my_avatar")
         let imageData = UIImageJPEGRepresentation(image!, 0.5)
         request.addFilePart("avatar", fileName: "avatar.jpg", data: imageData)
-        request.addStringPart("access_token", string: "user_access_token")
+        request.addStringPart("access_token", string: "PvFxFyvcKrzLW3HF6FUV")
         
         request.POST_Multipart { (object, error) -> () in
             if error != nil {

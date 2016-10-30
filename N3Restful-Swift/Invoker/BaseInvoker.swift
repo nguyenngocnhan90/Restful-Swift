@@ -22,10 +22,10 @@ class BaseInvoker: NSObject {
         baseURL = url
     }
     
-    func requestWithMethodName(_ methodName: String!) -> RESTRequest {
+    func requestWithMethodName(_ methodName: String?) -> RESTRequest {
         var url = baseURL
         
-        if methodName != nil {
+        if let methodName = methodName {
             url = "\(baseURL)/\(methodName)"
         }
         

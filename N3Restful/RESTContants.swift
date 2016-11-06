@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum RESTStatusCode: Int {
+public enum RESTStatus: Int {
     case success = 200
     case notFound = 404
     case badRequest = 400

@@ -48,18 +48,18 @@ class RESTRequest: NSObject {
                         let object = Mapper<T>().map(JSON: dictionary) else {
                         let restObj = RESTObject()
                         restObj.rawValue = "\(json)"
-                        restObj.statusCode = RESTStatusCode(rawValue: (response.response?.statusCode ?? 500))
+                        restObj.statusCode = RESTStatus(rawValue: (response.response?.statusCode ?? 500))
                         
                         completion(restObj as? T, nil)
                         return
                     }
                     
-                    object.statusCode = RESTStatusCode(rawValue: (response.response?.statusCode ?? 500))
+                    object.statusCode = RESTStatus(rawValue: (response.response?.statusCode ?? 500))
                     debugPrint(object)
                     completion(object, nil)
                     
                 case .failure (let error):
-                    let restError = RESTError(responseData: response.data, error: error)
+                    let restError = RESTError(response: response, error: error)
                     debugPrint(restError.errorFromServer)
                     completion(nil, restError)
                 }
@@ -80,7 +80,7 @@ class RESTRequest: NSObject {
                     completion(object, nil)
                     
                 case .failure (let error):
-                    let restError = RESTError(responseData: response.data, error: error)
+                    let restError = RESTError(response: response, error: error)
                     debugPrint(restError.errorFromServer)
                     completion(nil, restError)
                 }
@@ -182,18 +182,18 @@ class RESTRequest: NSObject {
                         let object = Mapper<T>().map(JSON: dictionary) else {
                         let restObj = RESTObject()
                         restObj.rawValue = "\(json)"
-                        restObj.statusCode = RESTStatusCode(rawValue: (response.response?.statusCode ?? 500))
+                        restObj.statusCode = RESTStatus(rawValue: (response.response?.statusCode ?? 500))
                         
                         completion(restObj as? T, nil)
                         return
                     }
                     
-                    object.statusCode = RESTStatusCode(rawValue: (response.response?.statusCode ?? 500))
+                    object.statusCode = RESTStatus(rawValue: (response.response?.statusCode ?? 500))
                     debugPrint(object)
                     completion(object, nil)
                     
                 case .failure (let error):
-                    let restError = RESTError(responseData: response.data, error: error)
+                    let restError = RESTError(response: response, error: error)
                     debugPrint(restError.errorFromServer)
                     completion(nil, restError)
                 }
@@ -268,20 +268,20 @@ class RESTRequest: NSObject {
                                     let object = Mapper<T>().map(JSON: dictionary) else {
                                     let restObj = RESTObject()
                                     restObj.rawValue = "\(json)"
-                                    restObj.statusCode = RESTStatusCode(rawValue: (response.response?.statusCode ?? 500))
+                                    restObj.statusCode = RESTStatus(rawValue: (response.response?.statusCode ?? 500))
                                     
                                     completion(restObj as? T, nil)
                                     return
                                 }
                                 
-                                object.statusCode = RESTStatusCode(rawValue: (response.response?.statusCode ?? 500))
+                                object.statusCode = RESTStatus(rawValue: (response.response?.statusCode ?? 500))
                                 debugPrint(object)
                                 completion(object, nil)
                                 
                             case .failure (let error):
                                 print(error)
                                 
-                                let restError = RESTError(responseData: response.data, error: error)
+                                let restError = RESTError(response: response, error: error)
                                 debugPrint(restError.errorFromServer)
                                 completion(nil, restError)
                             }

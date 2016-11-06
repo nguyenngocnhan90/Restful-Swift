@@ -12,7 +12,7 @@ import ObjectMapper
 class RESTObject: NSObject {
     
     var rawValue: String?
-    var statusCode: RESTStatusCode!
+    var statusCode: RESTStatus!
     
     override init() {
         super.init()

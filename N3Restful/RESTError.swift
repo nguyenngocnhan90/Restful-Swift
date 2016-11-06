@@ -8,26 +8,28 @@
 
 import Foundation
 import SwiftyJSON
+import Alamofire
 
 class RESTError: NSObject {
-    var errorFromResponse:  String? = ""
-    var errorFromServer:    String? = ""
+    var errorFromResponse:  String?
+    var errorFromServer:    String?
+    var statusCode: RESTStatus = .notFound
     
     override init() {
         errorFromServer = ""
         errorFromResponse = ""
     }
     
-    init(responseData: Data?, error: Error?) {
-        if (responseData != nil) {
-            let jsonObj = JSON(data: responseData!)
+    init(response: DataResponse<Any>?, error: Error?) {
+        if let response = response, let data = response.data {
+            let jsonObj = JSON(data: data)
             
             if (jsonObj != nil) {
                 let message = jsonObj["error"].stringValue
                 self.errorFromServer = message
             }
             else {
-                self.errorFromServer = NSString(data: responseData!, encoding: String.Encoding.utf8.rawValue) as String?
+                self.errorFromServer = NSString(data: data, encoding: String.Encoding.utf8.rawValue) as String?
             }
         }
         

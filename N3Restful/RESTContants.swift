@@ -8,15 +8,6 @@
 
 import Foundation
 
-public enum RESTStatus: Int {
-    case success = 200
-    case notFound = 404
-    case badRequest = 400
-    case internalServerError = 500
-    case badGateWay = 502
-    case serviceUnavailable = 503
-}
-
 class RESTContants: NSObject {
     
     // MARK: - RESTRequest Header Keys

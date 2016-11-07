@@ -6,7 +6,7 @@
 //  Copyright © 2016 Nhan Nguyen. All rights reserved.
 //
 
-import Foundation
+import HTTPStatusCodes
 import Alamofire
 import ObjectMapper
 
@@ -48,13 +48,13 @@ class RESTRequest: NSObject {
                         let object = Mapper<T>().map(JSON: dictionary) else {
                         let restObj = RESTObject()
                         restObj.rawValue = "\(json)"
-                        restObj.statusCode = RESTStatus(rawValue: (response.response?.statusCode ?? 500))
+                        restObj.statusCode = HTTPStatusCode(rawValue: (response.response?.statusCode ?? 503))
                         
                         completion(restObj as? T, nil)
                         return
                     }
                     
-                    object.statusCode = RESTStatus(rawValue: (response.response?.statusCode ?? 500))
+                    object.statusCode = HTTPStatusCode(rawValue: (response.response?.statusCode ?? 503))
                     debugPrint(object)
                     completion(object, nil)
                     
@@ -182,13 +182,13 @@ class RESTRequest: NSObject {
                         let object = Mapper<T>().map(JSON: dictionary) else {
                         let restObj = RESTObject()
                         restObj.rawValue = "\(json)"
-                        restObj.statusCode = RESTStatus(rawValue: (response.response?.statusCode ?? 500))
+                        restObj.statusCode = HTTPStatusCode(rawValue: (response.response?.statusCode ?? 503))
                         
                         completion(restObj as? T, nil)
                         return
                     }
                     
-                    object.statusCode = RESTStatus(rawValue: (response.response?.statusCode ?? 500))
+                    object.statusCode = HTTPStatusCode(rawValue: (response.response?.statusCode ?? 503))
                     debugPrint(object)
                     completion(object, nil)
                     
@@ -268,13 +268,13 @@ class RESTRequest: NSObject {
                                     let object = Mapper<T>().map(JSON: dictionary) else {
                                     let restObj = RESTObject()
                                     restObj.rawValue = "\(json)"
-                                    restObj.statusCode = RESTStatus(rawValue: (response.response?.statusCode ?? 500))
+                                    restObj.statusCode = HTTPStatusCode(rawValue: (response.response?.statusCode ?? 503))
                                     
                                     completion(restObj as? T, nil)
                                     return
                                 }
                                 
-                                object.statusCode = RESTStatus(rawValue: (response.response?.statusCode ?? 500))
+                                object.statusCode = HTTPStatusCode(rawValue: (response.response?.statusCode ?? 503))
                                 debugPrint(object)
                                 completion(object, nil)
                                 

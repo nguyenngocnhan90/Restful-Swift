@@ -24,8 +24,8 @@ class RESTMultipart: NSObject {
     }
     
     class JSONPart: RESTMultipart {
-        init(name: String!, jsonObject: NSObject) {
-            let data: Data! = NSKeyedArchiver.archivedData(withRootObject: (jsonObject as! RESTParam).toDictionary())
+        init(name: String, jsonObject: NSObject) {
+            let data = NSKeyedArchiver.archivedData(withRootObject: (jsonObject as! RESTParam).toDictionary())
             super.init(name: name, contentType: "application/json", data: data)
         }
     }
@@ -34,7 +34,7 @@ class RESTMultipart: NSObject {
         
         var fileName: String!
         
-        init(name: String!, fileName: String!, data: Data!) {
+        init(name: String, fileName: String, data: Data) {
             super.init(name: name, contentType: "image/png/jpg/jpeg", data: data)
             
             self.fileName = fileName
@@ -43,7 +43,7 @@ class RESTMultipart: NSObject {
     }
     
     class StringPart: RESTMultipart {
-        init(name: String!, string: String!) {
+        init(name: String, string: String) {
             let data: Data! = string.data(using: String.Encoding.utf8)
             super.init(name: name, contentType: "application/json", data: data)
         }

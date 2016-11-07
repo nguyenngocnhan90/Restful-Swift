@@ -9,11 +9,12 @@
 import Foundation
 import SwiftyJSON
 import Alamofire
+import HTTPStatusCodes
 
 class RESTError: NSObject {
     var errorFromResponse:  String?
     var errorFromServer:    String?
-    var statusCode: RESTStatus = .notFound
+    var statusCode: HTTPStatusCode! = .notFound
     
     override init() {
         errorFromServer = ""
@@ -31,9 +32,11 @@ class RESTError: NSObject {
             else {
                 self.errorFromServer = NSString(data: data, encoding: String.Encoding.utf8.rawValue) as String?
             }
+            
+            statusCode = HTTPStatusCode(rawValue: response.response?.statusCode ?? 0)
         }
         
-        if(error != nil) {
+        if let error = error {
             let castError: NSError = error as NSError!
             let errorString: String! = castError.localizedDescription
             

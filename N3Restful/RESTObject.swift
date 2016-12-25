@@ -6,19 +6,19 @@
 //  Copyright © 2016 Nhan Nguyen. All rights reserved.
 //
 
-import UIKit
+import HTTPStatusCodes
 import ObjectMapper
 
 class RESTObject: NSObject {
     
     var rawValue: String?
-    var statusCode = 0
+    var statusCode: HTTPStatusCode! = .notFound
     
     override init() {
         super.init()
     }
     
-    required init?(_ map: Map) {
+    required init?(map: Map) {
         
     }
     

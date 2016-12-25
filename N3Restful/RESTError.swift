@@ -8,34 +8,35 @@
 
 import Foundation
 import SwiftyJSON
+import Alamofire
+import HTTPStatusCodes
 
 class RESTError: NSObject {
-    var errorFromResponse:  String? = ""
-    var errorFromServer:    String? = ""
+    var errorFromResponse:  String?
+    var errorFromServer:    String?
+    var statusCode: HTTPStatusCode! = .notFound
     
     override init() {
         errorFromServer = ""
         errorFromResponse = ""
     }
     
-    init(error: NSError) {
-        errorFromResponse = error.userInfo["NSDebugDescription"] as? String
-    }
-    
-    init(responseData: NSData?, error: ErrorType?) {
-        if (responseData != nil) {
-            let jsonObj = JSON(data: responseData!)
+    init(response: DataResponse<Any>?, error: Error?) {
+        if let response = response, let data = response.data {
+            let jsonObj = JSON(data: data)
             
-            if (jsonObj != nil) {
+            if (jsonObj != JSON.null) {
                 let message = jsonObj["error"].stringValue
                 self.errorFromServer = message
             }
             else {
-                self.errorFromServer = NSString(data: responseData!, encoding: NSUTF8StringEncoding) as String?
+                self.errorFromServer = NSString(data: data, encoding: String.Encoding.utf8.rawValue) as String?
             }
+            
+            statusCode = HTTPStatusCode(rawValue: response.response?.statusCode ?? 0)
         }
         
-        if(error != nil) {
+        if let error = error {
             let castError: NSError = error as NSError!
             let errorString: String! = castError.localizedDescription
             
@@ -43,25 +44,13 @@ class RESTError: NSObject {
         }
     }
     
-    init(errorType: ErrorType) {
+    init(error: Error) {
         let restError = RESTError.init()
         
-        let castError: NSError = errorType as NSError!
+        let castError: NSError = error as NSError!
         let errorString: String! = castError.localizedDescription
         
         restError.errorFromResponse = errorString
-    }
-    
-}
-
-extension RESTError {
-    
-    func isInvalidPermission() -> Bool {
-        if let errorFromResponse = errorFromResponse {
-            return errorFromResponse.containsString("Access token is invalid")
-        }
-        
-        return false
     }
     
 }

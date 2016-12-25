@@ -8,16 +8,7 @@
 
 import Foundation
 
-public enum RESTStatusCode: Int {
-    case Success = 200
-    case NotFound = 404
-    case BadRequest = 400
-    case InternalServerError = 500
-    case BadGateWay = 502
-    case ServiceUnavailable = 503
-}
-
-class RESTContants: NSObject {
+class RESTContant: NSObject {
     
     // MARK: - RESTRequest Header Keys
     static let kRESTRequestHeaderKey                    = "Header"
@@ -36,5 +27,4 @@ class RESTContants: NSObject {
     // MARK: - Webservice url
     static let kRESTWebserviceUrl                       = "http://ws.url"
     
-    static let kRESTWebserviceResourceUrl               = ""
 }

@@ -8,7 +8,7 @@
 
 import Foundation
 
-class RESTContants: NSObject {
+class RESTContant: NSObject {
     
     // MARK: - RESTRequest Header Keys
     static let kRESTRequestHeaderKey                    = "Header"
@@ -27,5 +27,4 @@ class RESTContants: NSObject {
     // MARK: - Webservice url
     static let kRESTWebserviceUrl                       = "http://ws.url"
     
-    static let kRESTWebserviceResourceUrl               = ""
 }

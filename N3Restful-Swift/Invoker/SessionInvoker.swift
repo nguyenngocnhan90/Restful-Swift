@@ -8,26 +8,27 @@
 
 import UIKit
 
-class SessionInvoker: BaseInvoker {
+class SessionInvoker: RESTInvoker {
     
     init() {
         super.init(controllerName: "sessions")
     }
     
     func signIn(_ param: SignInParam, completion: @escaping (_ result: SignInResult?, _ error: RESTError?) -> Void) {
-        let request = requestWithMethodName(nil)
-        
-        request.post(bodyParam: param) { (result: SignInResult?, error) -> () in
-            completion(result, error)
+        if let request = createRequest(methodName: nil) {
+            request.post(bodyParam: param) { (result: SignInResult?, error) -> () in
+                completion(result, error)
+            }
         }
     }
     
     func signInFacebook(_ fbToken: String, completion: @escaping (_ result: SignInResult?, _ error: RESTError?) -> Void) {
-        let request = requestWithMethodName("facebook")
-        let dictionary = ["facebook_token": fbToken]
-        
-        request.request(dictionary: dictionary as [String : Any]!, method: .post) { (result: SignInResult?, error) -> () in
-            completion(result, error)
+        if let request = createRequest(methodName: "fb") {
+            let dictionary: [String: Any] = ["facebook_token": fbToken]
+            
+            request.request(dictionary: dictionary, method: .post) { (result: SignInResult?, error) -> () in
+                completion(result, error)
+            }
         }
     }
 }

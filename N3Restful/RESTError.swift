@@ -25,7 +25,7 @@ class RESTError: NSObject {
         if let response = response, let data = response.data {
             let jsonObj = JSON(data: data)
             
-            if (jsonObj != nil) {
+            if (jsonObj != JSON.null) {
                 let message = jsonObj["error"].stringValue
                 self.errorFromServer = message
             }
@@ -51,18 +51,6 @@ class RESTError: NSObject {
         let errorString: String! = castError.localizedDescription
         
         restError.errorFromResponse = errorString
-    }
-    
-}
-
-extension RESTError {
-    
-    func isInvalidPermission() -> Bool {
-        if let errorFromResponse = errorFromResponse {
-            return errorFromResponse.contains("Access token is invalid")
-        }
-        
-        return false
     }
     
 }

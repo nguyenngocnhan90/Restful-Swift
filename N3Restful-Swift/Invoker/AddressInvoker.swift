@@ -8,18 +8,19 @@
 
 import Foundation
 
-class AddressInvoker: BaseInvoker {
+class AddressInvoker: RESTInvoker {
     
     init() {
         super.init(controllerName: "addresses")
     }
-
+    
     func getListAddress(_ completion: @escaping (_ listProvinces: ListProvinceResult?, _ error: RESTError?) -> Void) {
-        let request = requestWithMethodName(nil)
-        request.addQueryParam("updated_at", value: "\(0)" as AnyObject)
-        
-        request.get { (object: ListProvinceResult?, error) -> () in
-            completion(object, error)
+        if let request = createRequest(methodName: nil) {
+            request.addQueryParam("updated_at", value: "\(0)" as AnyObject)
+            
+            request.get { (object: ListProvinceResult?, error) -> () in
+                completion(object, error)
+            }
         }
     }
 }

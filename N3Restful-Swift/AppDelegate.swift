@@ -27,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let addressInvoker = AddressInvoker()
         
         addressInvoker.getListAddress { (listProvinces, error) -> Void in
-            print(listProvinces?.provinces?[0].name)
+            print(listProvinces?.provinces?[0].name as Any)
         }
     }
     

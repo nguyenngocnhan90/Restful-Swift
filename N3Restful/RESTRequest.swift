@@ -75,9 +75,15 @@ class RESTRequest: NSObject {
                 
                 switch response.result {
                 case .success (let json):
-                    let object = Mapper<T>().mapArray(JSONString: String(describing: json))
-                    debugPrint(object as Any)
-                    completion(object, nil)
+                    guard let jsonArr = json as? [[String: Any]] else {
+                        completion([], nil)
+                        return
+                    }
+                    
+                    let objects = Mapper<T>().mapArray(JSONArray: jsonArr)
+                    debugPrint(objects as Any)
+                    completion(objects, nil)
+                    
                     
                 case .failure (let error):
                     let restError = RESTError(response: response, error: error)
@@ -217,7 +223,12 @@ class RESTRequest: NSObject {
                 
                 switch response.result {
                 case .success (let json):
-                    let objects = Mapper<T>().mapArray(JSONString: String(describing: json))
+                    guard let jsonArr = json as? [[String: Any]] else {
+                        completion([], nil)
+                        return
+                    }
+                    
+                    let objects = Mapper<T>().mapArray(JSONArray: jsonArr)
                     debugPrint(objects as Any)
                     completion(objects, nil)
                     

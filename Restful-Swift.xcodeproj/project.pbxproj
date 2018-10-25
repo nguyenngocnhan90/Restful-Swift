@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		081A80871E0FE25A0044AB21 /* RESTInvoker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081A80861E0FE25A0044AB21 /* RESTInvoker.swift */; };
+		081A80871E0FE25A0044AB21 /* RestInvoker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081A80861E0FE25A0044AB21 /* RestInvoker.swift */; };
 		15290637D0BEBE42D4E66483 /* Pods_N3Restful_Swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95B9A512102D10861BB649AC /* Pods_N3Restful_Swift.framework */; };
 		6B0450C31C78095C00BA6720 /* ListProvinceResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B0450C21C78095C00BA6720 /* ListProvinceResult.swift */; };
 		6B323C281C76CE16005D3AFB /* Province.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B323C271C76CE16005D3AFB /* Province.swift */; };
@@ -21,19 +21,19 @@
 		6B561F941C757F21003DDE02 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B561F921C757F21003DDE02 /* Main.storyboard */; };
 		6B561F961C757F21003DDE02 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6B561F951C757F21003DDE02 /* Assets.xcassets */; };
 		6B561F991C757F21003DDE02 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B561F971C757F21003DDE02 /* LaunchScreen.storyboard */; };
-		6B7DB5E31C83E83E005C23EA /* RESTContant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7DB5DD1C83E83E005C23EA /* RESTContant.swift */; };
-		6B7DB5E41C83E83E005C23EA /* RESTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7DB5DE1C83E83E005C23EA /* RESTError.swift */; };
-		6B7DB5E51C83E83E005C23EA /* RESTMultipart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7DB5DF1C83E83E005C23EA /* RESTMultipart.swift */; };
-		6B7DB5E61C83E83E005C23EA /* RESTParam.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7DB5E01C83E83E005C23EA /* RESTParam.swift */; };
+		6B7DB5E31C83E83E005C23EA /* RestContant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7DB5DD1C83E83E005C23EA /* RestContant.swift */; };
+		6B7DB5E41C83E83E005C23EA /* RestError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7DB5DE1C83E83E005C23EA /* RestError.swift */; };
+		6B7DB5E51C83E83E005C23EA /* RestMultipart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7DB5DF1C83E83E005C23EA /* RestMultipart.swift */; };
+		6B7DB5E61C83E83E005C23EA /* RestParam.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7DB5E01C83E83E005C23EA /* RestParam.swift */; };
 		6B7DB5E71C83E83E005C23EA /* RESTRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7DB5E11C83E83E005C23EA /* RESTRequest.swift */; };
-		6B7DB5E81C83E83E005C23EA /* RESTObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7DB5E21C83E83E005C23EA /* RESTObject.swift */; };
+		6B7DB5E81C83E83E005C23EA /* RestObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7DB5E21C83E83E005C23EA /* RestObject.swift */; };
 		6BD68B141C7A0BB800723E78 /* SignInParam.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BD68B131C7A0BB800723E78 /* SignInParam.swift */; };
 		6BDDF25A1C7F527C00316587 /* AddressInvoker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BDDF2571C7F527C00316587 /* AddressInvoker.swift */; };
 		6BDDF25C1C7F527C00316587 /* SessionInvoker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BDDF2591C7F527C00316587 /* SessionInvoker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		081A80861E0FE25A0044AB21 /* RESTInvoker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RESTInvoker.swift; sourceTree = "<group>"; };
+		081A80861E0FE25A0044AB21 /* RestInvoker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestInvoker.swift; sourceTree = "<group>"; };
 		206417C3E54AF487BA1204C3 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B708C300799FAC91CC5815A /* Pods-N3Restful-Swift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-N3Restful-Swift.debug.xcconfig"; path = "Pods/Target Support Files/Pods-N3Restful-Swift/Pods-N3Restful-Swift.debug.xcconfig"; sourceTree = "<group>"; };
 		6B0450C21C78095C00BA6720 /* ListProvinceResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListProvinceResult.swift; sourceTree = "<group>"; };
@@ -54,12 +54,12 @@
 		6B561FA51C757F21003DDE02 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6B561FAE1C757F21003DDE02 /* N3Restful_SwiftUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = N3Restful_SwiftUITests.swift; sourceTree = "<group>"; };
 		6B561FB01C757F21003DDE02 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		6B7DB5DD1C83E83E005C23EA /* RESTContant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RESTContant.swift; sourceTree = "<group>"; };
-		6B7DB5DE1C83E83E005C23EA /* RESTError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RESTError.swift; sourceTree = "<group>"; };
-		6B7DB5DF1C83E83E005C23EA /* RESTMultipart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RESTMultipart.swift; sourceTree = "<group>"; };
-		6B7DB5E01C83E83E005C23EA /* RESTParam.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RESTParam.swift; sourceTree = "<group>"; };
+		6B7DB5DD1C83E83E005C23EA /* RestContant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestContant.swift; sourceTree = "<group>"; };
+		6B7DB5DE1C83E83E005C23EA /* RestError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestError.swift; sourceTree = "<group>"; };
+		6B7DB5DF1C83E83E005C23EA /* RestMultipart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestMultipart.swift; sourceTree = "<group>"; };
+		6B7DB5E01C83E83E005C23EA /* RestParam.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestParam.swift; sourceTree = "<group>"; };
 		6B7DB5E11C83E83E005C23EA /* RESTRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RESTRequest.swift; sourceTree = "<group>"; };
-		6B7DB5E21C83E83E005C23EA /* RESTObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RESTObject.swift; sourceTree = "<group>"; };
+		6B7DB5E21C83E83E005C23EA /* RestObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestObject.swift; sourceTree = "<group>"; };
 		6BD68B131C7A0BB800723E78 /* SignInParam.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInParam.swift; sourceTree = "<group>"; };
 		6BDDF2571C7F527C00316587 /* AddressInvoker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddressInvoker.swift; sourceTree = "<group>"; };
 		6BDDF2591C7F527C00316587 /* SessionInvoker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionInvoker.swift; sourceTree = "<group>"; };
@@ -167,12 +167,12 @@
 		6B7DB5DC1C83E83E005C23EA /* N3Restful */ = {
 			isa = PBXGroup;
 			children = (
-				6B7DB5DD1C83E83E005C23EA /* RESTContant.swift */,
-				6B7DB5DE1C83E83E005C23EA /* RESTError.swift */,
-				081A80861E0FE25A0044AB21 /* RESTInvoker.swift */,
-				6B7DB5DF1C83E83E005C23EA /* RESTMultipart.swift */,
-				6B7DB5E21C83E83E005C23EA /* RESTObject.swift */,
-				6B7DB5E01C83E83E005C23EA /* RESTParam.swift */,
+				6B7DB5DD1C83E83E005C23EA /* RestContant.swift */,
+				6B7DB5DE1C83E83E005C23EA /* RestError.swift */,
+				081A80861E0FE25A0044AB21 /* RestInvoker.swift */,
+				6B7DB5DF1C83E83E005C23EA /* RestMultipart.swift */,
+				6B7DB5E21C83E83E005C23EA /* RestObject.swift */,
+				6B7DB5E01C83E83E005C23EA /* RestParam.swift */,
 				6B7DB5E11C83E83E005C23EA /* RESTRequest.swift */,
 			);
 			path = N3Restful;
@@ -319,7 +319,7 @@
 			files = (
 				6BDDF25C1C7F527C00316587 /* SessionInvoker.swift in Sources */,
 				6B561F911C757F21003DDE02 /* ViewController.swift in Sources */,
-				6B7DB5E31C83E83E005C23EA /* RESTContant.swift in Sources */,
+				6B7DB5E31C83E83E005C23EA /* RestContant.swift in Sources */,
 				6B323C281C76CE16005D3AFB /* Province.swift in Sources */,
 				6B7DB5E71C83E83E005C23EA /* RESTRequest.swift in Sources */,
 				6BD68B141C7A0BB800723E78 /* SignInParam.swift in Sources */,
@@ -328,13 +328,13 @@
 				6B482EFE1C7FEA2000E7F330 /* UserInvoker.swift in Sources */,
 				6B323C551C77197E005D3AFB /* District.swift in Sources */,
 				6BDDF25A1C7F527C00316587 /* AddressInvoker.swift in Sources */,
-				6B7DB5E61C83E83E005C23EA /* RESTParam.swift in Sources */,
+				6B7DB5E61C83E83E005C23EA /* RestParam.swift in Sources */,
 				6B561F8F1C757F21003DDE02 /* AppDelegate.swift in Sources */,
-				081A80871E0FE25A0044AB21 /* RESTInvoker.swift in Sources */,
-				6B7DB5E41C83E83E005C23EA /* RESTError.swift in Sources */,
+				081A80871E0FE25A0044AB21 /* RestInvoker.swift in Sources */,
+				6B7DB5E41C83E83E005C23EA /* RestError.swift in Sources */,
 				6B482F001C803A8600E7F330 /* User.swift in Sources */,
-				6B7DB5E51C83E83E005C23EA /* RESTMultipart.swift in Sources */,
-				6B7DB5E81C83E83E005C23EA /* RESTObject.swift in Sources */,
+				6B7DB5E51C83E83E005C23EA /* RestMultipart.swift in Sources */,
+				6B7DB5E81C83E83E005C23EA /* RestObject.swift in Sources */,
 				6B0450C31C78095C00BA6720 /* ListProvinceResult.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -477,7 +477,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "N3-NhanNguyen.N3Restful-Swift";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -493,7 +493,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "N3-NhanNguyen.N3Restful-Swift";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};

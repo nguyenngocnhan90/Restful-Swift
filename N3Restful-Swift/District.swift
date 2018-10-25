@@ -9,7 +9,7 @@
 import UIKit
 import ObjectMapper
 
-class District: RESTObject {
+class District: RestObject {
     
     var id: Int = 0
     var province_id: Int = 0

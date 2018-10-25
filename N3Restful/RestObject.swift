@@ -9,7 +9,7 @@
 import HTTPStatusCodes
 import ObjectMapper
 
-class RESTObject: NSObject {
+class RestObject: NSObject {
     
     var rawValue: String?
     var statusCode: HTTPStatusCode! = .notFound
@@ -28,7 +28,7 @@ class RESTObject: NSObject {
     
 }
 
-extension RESTObject: Mappable {
+extension RestObject: Mappable {
     
     func toString() -> String? {
         return rawValue

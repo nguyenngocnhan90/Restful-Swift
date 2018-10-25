@@ -8,13 +8,13 @@
 
 import Foundation
 
-class AddressInvoker: RESTInvoker {
+class AddressInvoker: RestInvoker {
     
     init() {
         super.init(controllerName: "addresses")
     }
     
-    func getListAddress(_ completion: @escaping (_ listProvinces: ListProvinceResult?, _ error: RESTError?) -> Void) {
+    func getListAddress(_ completion: @escaping (_ listProvinces: ListProvinceResult?, _ error: RestError?) -> Void) {
         if let request = createRequest(methodName: nil) {
             request.addQueryParam("updated_at", value: "\(0)" as AnyObject)
             

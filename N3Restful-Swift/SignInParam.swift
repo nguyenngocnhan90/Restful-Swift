@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SignInParam: RESTParam {
+class SignInParam: RestParam {
     var email: String!
     var password: String!
     var platform: String = "ios"

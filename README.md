@@ -10,7 +10,7 @@ RESTful service interaction in Swift iOS project.
 ## Features
 
 - Request with dictionary param.
-- Request with object param [RESTParam](https://github.com/nguyenngocnhan90/N3Restful-Swift/blob/master/N3Restful/RESTParam.swift).
+- Request with object param [RESTParam](https://github.com/nguyenngocnhan90/Restful-Swift/tree/master/Restful/RestParam.swift).
 - Request with multipart data (JSON, String, File).
 
 ## Requirements
@@ -19,7 +19,7 @@ RESTful service interaction in Swift iOS project.
 
 ## Installation
 
-- Copy [`N3Restful`](https://github.com/nguyenngocnhan90/N3Restful-Swift/tree/master/N3Restful) folder to your project manually. 
+- Copy [`Restful`](https://github.com/nguyenngocnhan90/Restful-Swift/tree/master/Restful) folder to your project manually. 
 - Install [Alamofire](https://github.com/Alamofire/Alamofire), [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON) and [ObjectMapper](https://github.com/Hearst-DD/ObjectMapper).
 
 ### CocoaPods

@@ -15,7 +15,7 @@ class AddressInvoker: RestInvoker {
     }
     
     func getListAddress(_ completion: @escaping (_ listProvinces: ListProvinceResult?, _ error: RestError?) -> Void) {
-        if let request = createRequest(methodName: nil) {
+        if let request = createRequest() {
             request.addQueryParam("updated_at", value: "\(0)" as AnyObject)
             
             request.get { (object: ListProvinceResult?, error) -> () in

@@ -22,7 +22,7 @@ class RestInvoker: NSObject {
         baseURL = url
     }
     
-    open func createRequest(methodName name: String?) -> RestRequest? {
+    open func createRequest(methodName name: String? = nil) -> RestRequest? {
         var url = baseURL
         
         if let name = name {

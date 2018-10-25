@@ -15,7 +15,7 @@ class SessionInvoker: RestInvoker {
     }
     
     func signIn(_ param: SignInParam, completion: @escaping (_ result: SignInResult?, _ error: RestError?) -> Void) {
-        if let request = createRequest(methodName: nil) {
+        if let request = createRequest() {
             request.post(bodyParam: param) { (result: SignInResult?, error) -> () in
                 completion(result, error)
             }

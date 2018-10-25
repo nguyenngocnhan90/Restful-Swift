@@ -8,16 +8,16 @@
 
 import UIKit
 
-class UserInvoker: RESTInvoker {
+class UserInvoker: RestInvoker {
     
     init() {
         super.init(controllerName: "users")
     }
     
-    func uploadAvatar(_ completion: @escaping (_ success: Bool, _ error: RESTError?) -> Void) {
+    func uploadAvatar(_ completion: @escaping (_ success: Bool, _ error: RestError?) -> Void) {
         if let request = createRequest(methodName: "change_avatar") {
             let image = UIImage(named: "my_avatar")
-            let imageData = UIImageJPEGRepresentation(image!, 0.5)
+            let imageData = image?.jpegData(compressionQuality: 0.5)
             request.addFilePart("avatar", fileName: "avatar.jpg", data: imageData)
             request.addStringPart("access_token", string: "PvFxFyvcKrzLW3HF6FUV")
             

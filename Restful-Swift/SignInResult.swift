@@ -9,7 +9,7 @@
 import UIKit
 import ObjectMapper
 
-class SignInResult: RESTObject {
+class SignInResult: RestObject {
     var access_token: String?
     var user: User?
     

@@ -9,7 +9,7 @@
 import UIKit
 import ObjectMapper
 
-class User: RESTObject {
+class User: RestObject {
 
     var email: String = ""
     var first_name: String = ""

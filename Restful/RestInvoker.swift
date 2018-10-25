@@ -8,13 +8,13 @@
 
 import Foundation
 
-class RESTInvoker: NSObject {
+class RestInvoker: NSObject {
     
-    open var baseURL: String = RESTContant.kRESTWebserviceUrl
+    open var baseURL: String = RestContant.kRESTWebserviceUrl
 
     init(controllerName: String?) {
         if let controllerName = controllerName {
-            baseURL = RESTContant.kRESTWebserviceUrl + "/" + controllerName
+            baseURL = RestContant.kRESTWebserviceUrl + "/" + controllerName
         }
     }
     
@@ -22,14 +22,14 @@ class RESTInvoker: NSObject {
         baseURL = url
     }
     
-    open func createRequest(methodName name: String?) -> RESTRequest? {
+    open func createRequest(methodName name: String? = nil) -> RestRequest? {
         var url = baseURL
         
         if let name = name {
             url = "\(baseURL)/\(name)"
         }
         
-        let request = RESTRequest(url: url)
+        let request = RestRequest(url: url)
         
         return request
     }

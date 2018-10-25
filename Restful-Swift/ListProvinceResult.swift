@@ -9,7 +9,7 @@
 import UIKit
 import ObjectMapper
 
-class ListProvinceResult: RESTObject {
+class ListProvinceResult: RestObject {
 
     var provinces: [Province]?
     

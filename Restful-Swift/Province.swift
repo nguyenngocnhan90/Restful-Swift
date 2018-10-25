@@ -1,5 +1,5 @@
 //
-//  District.swift
+//  Province.swift
 //  N3Restful-Swift
 //
 //  Created by Nhan Nguyen on 2/19/16.
@@ -9,23 +9,22 @@
 import UIKit
 import ObjectMapper
 
-class District: RESTObject {
+class Province: RestObject {
     
     var id: Int = 0
-    var province_id: Int = 0
     
     var name: String = ""
     var full_name: String = ""
     var unit: String = ""
+    var districts: [District]?
     
     override func mapping(map: Map) {
-        
         id <- map["id"]
-        province_id <- map["province_id"]
         
         name <- map["name"]
         full_name <- map["full_name"]
         unit <- map["unit"]
+        districts <- map["districts"]
     }
     
 }

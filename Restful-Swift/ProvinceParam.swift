@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ProvinceParam: RESTParam {
+class ProvinceParam: RestParam {
     var province_id: Int = 0
     var name: String?
 }

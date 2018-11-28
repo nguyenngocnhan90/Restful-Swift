@@ -12,11 +12,14 @@ import ObjectMapper
 
 class RestRequest: NSObject {
     
-    var url: String!
+    var url: String = ""
     
+    var queryParameters: [String: Any] = [:]
     var parameters: [String: Any] = [:]
     var headers: [String: String] = [:]
     var multiparts: [RestMultipart] = []
+    
+    // MARK: - Manager
     
     fileprivate lazy var sessionManager: SessionManager = {
         let config = URLSessionConfiguration.default
@@ -26,80 +29,127 @@ class RestRequest: NSObject {
         return manager
     }()
     
+    // MARK: - Initial
+    
     init(url: String) {
         self.url = url
     }
     
-    open class func request(with url: String) -> RestRequest {
+    static func request(with url: String) -> RestRequest {
         let request = RestRequest(url: url)
         return request
     }
     
-    // MARK: -
-    // MARK: - Request methods
+    // MARK: - Completions
+    
+    typealias ObjectCompletion<T: RestObject> = (_ result: T?, _ error: RestError?) -> ()
+    typealias ArrayCompletion<T: RestObject> = (_ result: [T], _ error: RestError?) -> ()
+    
+}
+
+// MARK: - BASE REQUEST
+
+extension RestRequest {
+    
+    fileprivate func dataRequest(method: Alamofire.HTTPMethod = .get, encoding: ParameterEncoding = URLEncoding.default) -> DataRequest {
+        appendQueryParamsToURL()
+        return sessionManager.request(url,
+                                      method: method,
+                                      parameters: parameters,
+                                      encoding: encoding,
+                                      headers: headers)
+            .validate(statusCode: 200..<400)
+    }
+    
+    fileprivate func handleResponse<T: RestObject>(_ response: DataResponse<Any>,
+                                                   _ completion: ObjectCompletion<T>? = nil,
+                                                   retry: (() -> Void)? = nil) {
+        let statusCode = HTTPStatusCode(rawValue: (response.response?.statusCode ?? 503))!
+        
+        switch response.result {
+        case .success (let json):
+            guard let dictionary = json as? [String : Any],
+                let object = Mapper<T>().map(JSON: dictionary) else {
+                    let restObj = RestObject()
+                    restObj.rawValue = "\(json)"
+                    restObj.statusCode = statusCode
+                    
+                    completion?(restObj as? T, nil)
+                    return
+            }
+            
+            object.statusCode = statusCode
+            debugPrint(object)
+            completion?(object, nil)
+            
+        case .failure (let error):
+            let restError = RestError(response: response, error: error)
+            debugPrint(restError.errorMessage ?? "")
+            
+            var restObject: RestObject?
+            if let json = restError.responseDictionary {
+                restObject = Mapper<T>().map(JSON: json)
+            }
+            
+            completion?(restObject as? T, restError)
+        }
+    }
+    
+    func handleArrayResponse<T: RestObject>(_ response: DataResponse<Any>,
+                                            _ completion: ArrayCompletion<T>?,
+                                            retry: (() -> Void)? = nil) {
+        switch response.result {
+        case .success (let json):
+            guard let jsonArr = json as? [[String: Any]] else {
+                completion?([], nil)
+                return
+            }
+            
+            let objects = Mapper<T>().mapArray(JSONArray: jsonArr)
+            debugPrint(objects as Any)
+            completion?(objects, nil)
+            
+        case .failure (let error):
+            let restError = RestError(response: response, error: error)
+            debugPrint(restError.errorMessage ?? "")
+            
+            completion?([], restError)
+        }
+    }
+    
+}
+
+// MARK: - GET
+
+extension RestRequest {
     
     /**
      GET request
      
      - parameter completion: callback result
      */
-    func get<T: RestObject>(_ completion:@escaping (_ result: T?, _ error: RestError?) -> ()) {
-        appendQueryParamsToURL()
-        
-        sessionManager.request(url, headers: headers)
-            .validate(statusCode: 200..<400)
-            .responseJSON { response -> Void in
-                
-                switch response.result {
-                case .success (let json):
-                    guard let dictionary = json as? [String : Any],
-                        let object = Mapper<T>().map(JSON: dictionary) else {
-                            let restObj = RestObject()
-                            restObj.rawValue = "\(json)"
-                            restObj.statusCode = HTTPStatusCode(rawValue: (response.response?.statusCode ?? 503))!
-                            
-                            completion(restObj as? T, nil)
-                            return
-                    }
-                    
-                    object.statusCode = HTTPStatusCode(rawValue: (response.response?.statusCode ?? 503))!
-                    debugPrint(object)
-                    completion(object, nil)
-                    
-                case .failure (let error):
-                    let restError = RestError(response: response, error: error)
-                    debugPrint(restError.errorMessage ?? "")
-                }
+    
+    func get<T: RestObject>(_ completion: ObjectCompletion<T>? = nil) {
+        dataRequest().responseJSON { response -> Void in
+            self.handleResponse(response, completion, retry: { [weak self] in
+                self?.get(completion)
+            })
         }
     }
     
-    func getArray<T: RestObject>(_ completion:@escaping (_ result: [T], _ error: RestError?) -> ()) {
-        appendQueryParamsToURL()
-        
-        sessionManager.request(url, headers: headers)
-            .validate(statusCode: 200..<400)
-            .responseJSON { response -> Void in
-                
-                switch response.result {
-                case .success (let json):
-                    guard let jsonArr = json as? [[String: Any]] else {
-                        completion([], nil)
-                        return
-                    }
-                    
-                    let objects = Mapper<T>().mapArray(JSONArray: jsonArr)
-                    debugPrint(objects as Any)
-                    completion(objects, nil)
-                    
-                case .failure (let error):
-                    let restError = RestError(response: response, error: error)
-                    debugPrint(restError.errorMessage ?? "")
-                }
+    func getArray<T: RestObject>(_ completion: ArrayCompletion<T>? = nil) {
+        dataRequest().responseJSON { response -> Void in
+            self.handleArrayResponse(response, completion, retry: { [weak self] in
+                self?.getArray(completion)
+            })
         }
     }
     
-    
-    // MARK: - Request with object body
+}
+
+// MARK: - Request with object body
+
+extension RestRequest {
     
     /**
      POST request
@@ -107,9 +157,9 @@ class RestRequest: NSObject {
      - parameter objectBody: object param - type RESTParam
      - parameter completion: callback result
      */
-    func post<T: RestObject>(bodyParam param: RestParam?, completion:@escaping (_ result: T?, _ error: RestError?) -> ()) {
+    func post<T: RestObject>(bodyParam param: RestParam? = nil, completion: ObjectCompletion<T>? = nil) {
         request(bodyParam: param, method: .post) { (object: T?, error) -> () in
-            completion(object, error)
+            completion?(object, error)
         }
     }
     
@@ -119,9 +169,9 @@ class RestRequest: NSObject {
      - parameter objectBody: object param - type RESTParam
      - parameter completion: callback result
      */
-    func put<T: RestObject>(bodyParam param: RestParam?, completion:@escaping (_ result: T?, _ error: RestError?) -> ()) {
+    func put<T: RestObject>(bodyParam param: RestParam? = nil, completion: ObjectCompletion<T>? = nil) {
         request(bodyParam: param, method: .put) { (object: T?, error) -> () in
-            completion(object, error)
+            completion?(object, error)
         }
     }
     
@@ -131,10 +181,10 @@ class RestRequest: NSObject {
      - parameter objectBody: object param - type RESTParam
      - parameter completion: callback result
      */
-    func patch<T: RestObject>(bodyParam param: RestParam?, completion:@escaping (_ result: T?, _ error: RestError?) -> ()) {
+    func patch<T: RestObject>(bodyParam param: RestParam? = nil, completion: ObjectCompletion<T>? = nil) {
         request(bodyParam: param, method: .patch)
         { (object: T?, error) -> () in
-            completion(object, error)
+            completion?(object, error)
         }
     }
     
@@ -144,26 +194,32 @@ class RestRequest: NSObject {
      - parameter objectBody: object param - type RESTParam
      - parameter completion: callback result
      */
-    func delete<T: RestObject>(bodyParam param: RestParam?, completion:@escaping (_ result: T?, _ error: RestError?) -> ()) {
+    func delete<T: RestObject>(bodyParam param: RestParam? = nil, completion: ObjectCompletion<T>? = nil) {
         request(bodyParam: param, method: .delete) { (object: T?, error) -> () in
-            completion(object, error)
+            completion?(object, error)
         }
     }
     
     /**
-     Common request with object oby
+     Common request with object boby
      
      - parameter objectBody: object param - type RESTParam
      - parameter method:
      - parameter completion: call back
      */
-    func request<T: RestObject>(bodyParam objectBody: RestParam?, method: Alamofire.HTTPMethod, completion:@escaping (_ result: T?, _ error: RestError?) -> ()) {
+    func request<T: RestObject>(bodyParam objectBody: RestParam? = nil, method: Alamofire.HTTPMethod, completion: ObjectCompletion<T>? = nil) {
         let dictionary = objectBody?.toDictionary
         
         request(dictionary: dictionary, method: method) { (result: T?, error) -> () in
-            completion(result, error)
+            completion?(result, error)
         }
     }
+    
+}
+
+// MARK: - Request dictionary body
+
+extension RestRequest {
     
     /**
      Request with dictionary parameters
@@ -172,97 +228,47 @@ class RestRequest: NSObject {
      - parameter method:          request method
      - parameter completion:      callback result
      */
-    func request<T: RestObject>(dictionary param: [String: Any]? = nil, method: Alamofire.HTTPMethod, completion:@escaping (_ result: T?, _ error: RestError?) -> ()) {
-        appendQueryParamsToURL()
-        
+    
+    func request<T: RestObject>(dictionary param: [String: Any]? = nil, method: Alamofire.HTTPMethod, completion: ObjectCompletion<T>? = nil) {
         if let param = param {
             parameters = param
         }
         
-        sessionManager.request(url,
-                               method: method,
-                               parameters: parameters,
-                               encoding: JSONEncoding.default,
-                               headers: headers)
-            .validate(statusCode: 200..<400)
+        dataRequest(method: method, encoding: JSONEncoding.default)
             .responseJSON { (response) -> Void in
-                
-                switch response.result {
-                case .success (let json):
-                    guard let dictionary = json as? [String : Any],
-                        let object = Mapper<T>().map(JSON: dictionary) else {
-                            let restObj = RestObject()
-                            restObj.rawValue = "\(json)"
-                            restObj.statusCode = HTTPStatusCode(rawValue: (response.response?.statusCode ?? 503))!
-                            
-                            completion(restObj as? T, nil)
-                            return
-                    }
-                    
-                    object.statusCode = HTTPStatusCode(rawValue: (response.response?.statusCode ?? 503))!
-                    debugPrint(object)
-                    completion(object, nil)
-                    
-                case .failure (let error):
-                    let restError = RestError(response: response, error: error)
-                    debugPrint(restError.errorMessage ?? "")
-                    
-                    var restObject: RestObject?
-                    if let json = restError.responseDictionary {
-                        restObject = Mapper<T>().map(JSON: json)
-                    }
-                    
-                    completion(restObject as? T, restError)
-                }
+                self.handleResponse(response, completion, retry: { [weak self] in
+                    self?.request(dictionary: param, method: method, completion: completion)
+                })
         }
     }
     
-    func requestArray<T: RestObject>(dictionary param: [String: Any]?, method: Alamofire.HTTPMethod, completion:@escaping (_ array: [T]?, _ error: RestError?) -> ()) {
-        appendQueryParamsToURL()
-        
+    func requestArray<T: RestObject>(dictionary param: [String: Any]? = nil, method: Alamofire.HTTPMethod, completion: ArrayCompletion<T>? = nil) {
         if let param = param {
-            self.parameters = param
+            parameters = param
         }
         
-        sessionManager.request(url,
-                               method: method,
-                               parameters: parameters,
-                               encoding: JSONEncoding.default,
-                               headers: headers)
-            .validate(statusCode: 200..<400)
+        dataRequest(method: method, encoding: JSONEncoding.default)
             .responseJSON { (response) -> Void in
-                
-                switch response.result {
-                case .success (let json):
-                    guard let jsonArr = json as? [[String: Any]] else {
-                        completion([], nil)
-                        return
-                    }
-                    
-                    let objects = Mapper<T>().mapArray(JSONArray: jsonArr)
-                    debugPrint(objects as Any)
-                    completion(objects, nil)
-                    
-                    
-                case .failure (let error):
-                    let restError = RestError(response: response, error: error)
-                    debugPrint(restError.errorMessage ?? "")
-                }
+                self.handleArrayResponse(response, completion, retry: { [weak self] in
+                    self?.requestArray(dictionary: param, method: method, completion: completion)
+                })
         }
     }
     
-    
-    
-    // MARK: - Multiparts: Uploading files
+}
+
+// MARK: - Multiparts: Uploading files
+
+extension RestRequest {
     
     /**
      POST request with multipart: file, data, string
      
      - parameter completion: callback result
      */
-    func postMultipart<T: RestObject>(_ completion:@escaping (_ result: T?, _ error: RestError?) -> ()) {
+    func postMultipart<T: RestObject>(_ completion: ObjectCompletion<T>? = nil) {
         upload(.post) { (object: T?, error) -> () in
-            completion(object, error)
+            completion?(object, error)
         }
     }
     
@@ -271,9 +277,9 @@ class RestRequest: NSObject {
      
      - parameter completion: callback result
      */
-    func putMultipart<T: RestObject>(_ completion:@escaping (_ result: T?, _ error: RestError?) -> ()) {
+    func putMultipart<T: RestObject>(_ completion: ObjectCompletion<T>? = nil) {
         upload(.put) { (object: T?, error) -> () in
-            completion(object, error)
+            completion?(object, error)
         }
     }
     
@@ -282,9 +288,9 @@ class RestRequest: NSObject {
      
      - parameter completion: callback result
      */
-    func patchMultipart<T: RestObject>(_ completion:@escaping (_ result: T?, _ error: RestError?) -> ()) {
+    func patchMultipart<T: RestObject>(_ completion: ObjectCompletion<T>? = nil) {
         upload(.patch) { (object: T?, error) -> () in
-            completion(object, error)
+            completion?(object, error)
         }
     }
     
@@ -294,7 +300,7 @@ class RestRequest: NSObject {
      - parameter method:     POST, PUT, PATCH
      - parameter completion: callback result
      */
-    fileprivate func upload<T: RestObject>(_ method: Alamofire.HTTPMethod, completion:@escaping (_ result: T?, _ error: RestError?) -> ()) {
+    fileprivate func upload<T: RestObject>(_ method: Alamofire.HTTPMethod, _ completion: ObjectCompletion<T>? = nil) {
         appendQueryParamsToURL()
         
         sessionManager.upload(
@@ -312,41 +318,18 @@ class RestRequest: NSObject {
             encodingCompletion: { (result) -> Void in
                 switch result {
                 case .success(let request, _, _):
-                    request
-                        .validate(statusCode: 200..<400)
+                    request.validate(statusCode: 200..<400)
                         .responseJSON(completionHandler: { (response) -> Void in
-                            print(response.result)
-                            
-                            switch response.result {
-                            case .success (let json):
-                                guard let dictionary = json as? [String : Any],
-                                    let object = Mapper<T>().map(JSON: dictionary) else {
-                                        let restObj = RestObject()
-                                        restObj.rawValue = "\(json)"
-                                        restObj.statusCode = HTTPStatusCode(rawValue: (response.response?.statusCode ?? 503))!
-                                        
-                                        completion(restObj as? T, nil)
-                                        return
-                                }
-                                
-                                object.statusCode = HTTPStatusCode(rawValue: (response.response?.statusCode ?? 503))!
-                                debugPrint(object)
-                                completion(object, nil)
-                                
-                            case .failure (let error):
-                                print(error)
-                                
-                                let restError = RestError(response: response, error: error)
-                                debugPrint(restError.errorMessage ?? "")
-                                completion(nil, restError)
-                            }
+                            self.handleResponse(response, completion, retry: { [weak self] in
+                                self?.upload(method, completion)
+                            })
                         })
                     
                 case .failure(let error):
                     print(error)
                     
                     let restError = RestError(error: error)
-                    completion(nil, restError)
+                    completion?(nil, restError)
                 }
         })
     }
@@ -354,41 +337,31 @@ class RestRequest: NSObject {
 }
 
 
-// MARK: -
 // MARK: - Add Properties
 
 extension RestRequest {
     
     func addObjectBodyParam(_ objectParam: RestParam) {
-        self.parameters = objectParam.toDictionary
+        parameters = objectParam.toDictionary
     }
     
     func addQueryParam(_ name: String, value: Any) {
-        self.parameters[name] = "\(value)"
+        queryParameters[name] = "\(value)"
     }
     
     func addJsonPart(_ name: String, json: NSDictionary) {
-        let part: RestMultipart! = RestMultipart.JSONPart(name: name, jsonObject: json)
-        
-        if part != nil {
-            self.multiparts.append(part)
-        }
+        let part = RestMultipart.JSONPart(name: name, jsonObject: json)
+        self.multiparts.append(part)
     }
     
     func addFilePart(_ name: String, fileName: String, data: Data!) {
-        let part: RestMultipart! = RestMultipart.FilePart(name: name, fileName: fileName, data: data)
-        
-        if part != nil {
-            self.multiparts.append(part)
-        }
+        let part = RestMultipart.FilePart(name: name, fileName: fileName, data: data)
+        self.multiparts.append(part)
     }
     
     func addStringPart(_ name: String, string: String) {
-        let part: RestMultipart! = RestMultipart.StringPart(name: name, string: string)
-        
-        if part != nil {
-            self.multiparts.append(part)
-        }
+        let part = RestMultipart.StringPart(name: name, string: string)
+        self.multiparts.append(part)    
     }
     
 }
@@ -418,13 +391,13 @@ extension RestRequest {
 extension RestRequest {
     
     fileprivate func appendQueryParamsToURL() {
-        if parameters.isEmpty {
+        if queryParameters.isEmpty {
             return
         }
         
         var query: String = ""
         
-        for (key, value) in self.parameters {
+        for (key, value) in queryParameters {
             if let paramValue = value as? String {
                 if (query.lengthOfBytes(using: String.Encoding.utf8) == 0) {
                     query = "?"

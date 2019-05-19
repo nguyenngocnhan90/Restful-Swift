@@ -123,11 +123,9 @@ extension RestRequest {
 
 extension RestRequest {
     
-    /**
-     GET request
-     
-     - parameter completion: callback result
-     */
+    /// GET request
+    ///
+    /// - parameter completion: callback result
     
     func get<T: RestObject>(_ completion: ObjectCompletion<T>? = nil) {
         dataRequest().responseJSON { response -> Void in
@@ -151,36 +149,30 @@ extension RestRequest {
 
 extension RestRequest {
     
-    /**
-     POST request
-     
-     - parameter objectBody: object param - type RESTParam
-     - parameter completion: callback result
-     */
+    /// POST request
+    ///
+    /// - parameter objectBody: object param - type RESTParam
+    /// - parameter completion: callback result
     func post<T: RestObject>(bodyParam param: RestParam? = nil, completion: ObjectCompletion<T>? = nil) {
         request(bodyParam: param, method: .post) { (object: T?, error) -> () in
             completion?(object, error)
         }
     }
     
-    /**
-     PUT request
-     
-     - parameter objectBody: object param - type RESTParam
-     - parameter completion: callback result
-     */
+    /// PUT request
+    ///
+    /// - parameter objectBody: object param - type RESTParam
+    /// - parameter completion: callback result
     func put<T: RestObject>(bodyParam param: RestParam? = nil, completion: ObjectCompletion<T>? = nil) {
         request(bodyParam: param, method: .put) { (object: T?, error) -> () in
             completion?(object, error)
         }
     }
     
-    /**
-     PATCH request
-     
-     - parameter objectBody: object param - type RESTParam
-     - parameter completion: callback result
-     */
+    /// PATCH request
+    ///
+    /// - parameter objectBody: object param - type RESTParam
+    /// - parameter completion: callback result
     func patch<T: RestObject>(bodyParam param: RestParam? = nil, completion: ObjectCompletion<T>? = nil) {
         request(bodyParam: param, method: .patch)
         { (object: T?, error) -> () in
@@ -188,25 +180,21 @@ extension RestRequest {
         }
     }
     
-    /**
-     DELETE request
-     
-     - parameter objectBody: object param - type RESTParam
-     - parameter completion: callback result
-     */
+    /// DELETE request
+    ///
+    ///- parameter objectBody: object param - type RESTParam
+    /// - parameter completion: callback result
     func delete<T: RestObject>(bodyParam param: RestParam? = nil, completion: ObjectCompletion<T>? = nil) {
         request(bodyParam: param, method: .delete) { (object: T?, error) -> () in
             completion?(object, error)
         }
     }
     
-    /**
-     Common request with object boby
-     
-     - parameter objectBody: object param - type RESTParam
-     - parameter method:
-     - parameter completion: call back
-     */
+    /// Common request with object boby
+    ///
+    /// - parameter objectBody: object param - type RESTParam
+    /// - parameter method:
+    /// - parameter completion: call back
     func request<T: RestObject>(bodyParam objectBody: RestParam? = nil, method: Alamofire.HTTPMethod, completion: ObjectCompletion<T>? = nil) {
         let dictionary = objectBody?.toDictionary
         
@@ -221,13 +209,11 @@ extension RestRequest {
 
 extension RestRequest {
     
-    /**
-     Request with dictionary parameters
-     
-     - parameter dictionaryParam: parameters
-     - parameter method:          request method
-     - parameter completion:      callback result
-     */
+    /// equest with dictionary parameters
+    ///
+    /// - parameter dictionaryParam: parameters
+    /// - parameter method:          request method
+    /// - parameter completion:      callback result
     
     func request<T: RestObject>(dictionary param: [String: Any]? = nil, method: Alamofire.HTTPMethod, completion: ObjectCompletion<T>? = nil) {
         if let param = param {
@@ -261,45 +247,37 @@ extension RestRequest {
 
 extension RestRequest {
     
-    /**
-     POST request with multipart: file, data, string
-     
-     - parameter completion: callback result
-     */
+    /// POST request with multipart: file, data, string
+    ///
+    /// - parameter completion: callback result
     func postMultipart<T: RestObject>(_ completion: ObjectCompletion<T>? = nil) {
         upload(.post) { (object: T?, error) -> () in
             completion?(object, error)
         }
     }
     
-    /**
-     PUT request with multipart: file, data, string
-     
-     - parameter completion: callback result
-     */
+    /// PUT request with multipart: file, data, string
+    ///
+    /// - parameter completion: callback result
     func putMultipart<T: RestObject>(_ completion: ObjectCompletion<T>? = nil) {
         upload(.put) { (object: T?, error) -> () in
             completion?(object, error)
         }
     }
     
-    /**
-     PATCH request with multipart: file, data, string
-     
-     - parameter completion: callback result
-     */
+    /// PATCH request with multipart: file, data, string
+    ///
+    /// - parameter completion: callback result
     func patchMultipart<T: RestObject>(_ completion: ObjectCompletion<T>? = nil) {
         upload(.patch) { (object: T?, error) -> () in
             completion?(object, error)
         }
     }
     
-    /**
-     Upload multipart: file, data, string
-     
-     - parameter method:     POST, PUT, PATCH
-     - parameter completion: callback result
-     */
+    /// Upload multipart: file, data, string
+    ///
+    /// - parameter method:     POST, PUT, PATCH
+    /// - parameter completion: callback result
     fileprivate func upload<T: RestObject>(_ method: Alamofire.HTTPMethod, _ completion: ObjectCompletion<T>? = nil) {
         appendQueryParamsToURL()
         
@@ -391,26 +369,28 @@ extension RestRequest {
 extension RestRequest {
     
     fileprivate func appendQueryParamsToURL() {
-        if queryParameters.isEmpty {
-            return
+        guard !url.isEmpty,
+            let urlComponents = NSURLComponents(string: url),
+            !queryParameters.isEmpty else {
+                return
         }
         
-        var query: String = ""
+        var queryParams: [URLQueryItem] = urlComponents.queryItems ?? []
+        var dictionary: [String: String] = [:]
         
-        for (key, value) in queryParameters {
-            if let paramValue = value as? String {
-                if (query.lengthOfBytes(using: String.Encoding.utf8) == 0) {
-                    query = "?"
-                }
-                else {
-                    query += "&"
-                }
-                
-                query = query + key + "=" + paramValue
+        queryParams.forEach { (item) in
+            if let value = item.value, !value.isEmpty {
+                dictionary[item.name] = value
             }
         }
         
-        url = url + query
+        queryParameters.forEach { (arg: (key: String, value: Any)) in
+            let (key, value) = arg
+            queryParams.append(URLQueryItem(name: key, value: "\(value)"))
+        }
+        
+        urlComponents.queryItems = queryParams
+        url = urlComponents.url?.absoluteString ?? ""
     }
     
 }

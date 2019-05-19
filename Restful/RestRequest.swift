@@ -369,26 +369,28 @@ extension RestRequest {
 extension RestRequest {
     
     fileprivate func appendQueryParamsToURL() {
-        if queryParameters.isEmpty {
-            return
+        guard !url.isEmpty,
+            let urlComponents = NSURLComponents(string: url),
+            !queryParameters.isEmpty else {
+                return
         }
         
-        var query: String = ""
+        var queryParams: [URLQueryItem] = urlComponents.queryItems ?? []
+        var dictionary: [String: String] = [:]
         
-        for (key, value) in queryParameters {
-            if let paramValue = value as? String {
-                if (query.lengthOfBytes(using: String.Encoding.utf8) == 0) {
-                    query = "?"
-                }
-                else {
-                    query += "&"
-                }
-                
-                query = query + key + "=" + paramValue
+        queryParams.forEach { (item) in
+            if let value = item.value, !value.isEmpty {
+                dictionary[item.name] = value
             }
         }
         
-        url = url + query
+        queryParameters.forEach { (arg: (key: String, value: Any)) in
+            let (key, value) = arg
+            queryParams.append(URLQueryItem(name: key, value: "\(value)"))
+        }
+        
+        urlComponents.queryItems = queryParams
+        url = urlComponents.url?.absoluteString ?? ""
     }
     
 }
